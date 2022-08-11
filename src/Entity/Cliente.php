@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ClienteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -27,7 +28,7 @@ class Cliente
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $Telefono = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $Direccion = null;
 
     #[ORM\OneToMany(mappedBy: 'cliente', targetEntity: Venta::class)]

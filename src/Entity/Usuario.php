@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UsuarioRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -41,11 +42,14 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $Apellido = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $Telefono = null;
 
     #[ORM\OneToMany(mappedBy: 'usuario', targetEntity: Venta::class)]
     private Collection $Ventas;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $Direccion = null;
 
     public function __construct()
     {
@@ -208,6 +212,18 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
                 $venta->setUsuario(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDireccion(): ?string
+    {
+        return $this->Direccion;
+    }
+
+    public function setDireccion(?string $Direccion): self
+    {
+        $this->Direccion = $Direccion;
 
         return $this;
     }
