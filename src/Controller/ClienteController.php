@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Cliente;
 use App\Repository\ClienteRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,12 +13,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class ClienteController extends AbstractController
 {
     private EntityManagerInterface $em;
-    private ClienteRepository $cr;
+    private EntityRepository $cr;
 
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
-        $cr = $this->em->getRepository(Cliente::class);
+        $this->cr = $this->em->getRepository(Cliente::class);
     }
 
     #[Route('/cliente', name: 'app_cliente')]

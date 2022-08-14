@@ -34,10 +34,26 @@ class Cliente
     #[ORM\OneToMany(mappedBy: 'cliente', targetEntity: Venta::class)]
     private Collection $Ventas;
 
-    public function __construct()
+    /**
+     * @param int|null $id
+     * @param string|null $Dni
+     * @param string|null $Nombre
+     * @param string|null $Apellido
+     * @param string|null $Telefono
+     * @param string|null $Direccion
+     * @param Collection $Ventas
+     */
+    public function __construct(?int $id, ?string $Dni, ?string $Nombre, ?string $Apellido, ?string $Telefono, ?string $Direccion, Collection $Ventas)
     {
-        $this->Ventas = new ArrayCollection();
+        $this->id = $id;
+        $this->Dni = $Dni;
+        $this->Nombre = $Nombre;
+        $this->Apellido = $Apellido;
+        $this->Telefono = $Telefono;
+        $this->Direccion = $Direccion;
+        $this->Ventas = $Ventas;
     }
+
 
     public function getId(): ?int
     {
@@ -133,5 +149,4 @@ class Cliente
 
         return $this;
     }
-
 }
