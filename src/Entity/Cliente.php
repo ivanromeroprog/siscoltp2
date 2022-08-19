@@ -32,9 +32,10 @@ class Cliente
     private ?string $Direccion = null;
 
     #[ORM\OneToMany(mappedBy: 'cliente', targetEntity: Venta::class)]
-    private Collection $Ventas;
+    private ?Collection $Ventas;
 
     /**
+     * Cliente constructor.
      * @param int|null $id
      * @param string|null $Dni
      * @param string|null $Nombre
@@ -43,7 +44,7 @@ class Cliente
      * @param string|null $Direccion
      * @param Collection $Ventas
      */
-    public function __construct(?int $id, ?string $Dni, ?string $Nombre, ?string $Apellido, ?string $Telefono, ?string $Direccion, Collection $Ventas)
+    public function __construct(?string $Dni, ?string $Nombre, ?string $Apellido, ?string $Telefono, ?string $Direccion, ?int $id = null, Collection $Ventas = null)
     {
         $this->id = $id;
         $this->Dni = $Dni;
