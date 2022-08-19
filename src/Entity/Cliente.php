@@ -44,7 +44,7 @@ class Cliente
      * @param string|null $Direccion
      * @param Collection $Ventas
      */
-    public function __construct(?string $Dni, ?string $Nombre, ?string $Apellido, ?string $Telefono, ?string $Direccion, ?int $id = null, Collection $Ventas = null)
+    public function __construct(?string $Dni = null, ?string $Nombre = null, ?string $Apellido = null, ?string $Telefono = null, ?string $Direccion = null, ?int $id = null, Collection $Ventas = null)
     {
         $this->id = $id;
         $this->Dni = $Dni;
