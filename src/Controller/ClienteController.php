@@ -4,11 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Cliente;
 use App\Form\ClienteType;
-use App\Repository\ClienteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,7 +22,7 @@ class ClienteController extends AbstractController
         $this->cr = $this->em->getRepository(Cliente::class);
     }
 
-    #[Route('/cliente/new', name: 'app_cliente_new')]
+    #[Route('/cliente/nuevo', name: 'app_cliente_new')]
     public function index(Request $request): Response
     {
         $cliente = new Cliente();
