@@ -16,7 +16,7 @@ class Cliente
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 9)]
+    #[ORM\Column(length: 9, unique: true)]
     private ?string $Dni = null;
 
     #[ORM\Column(length: 255)]

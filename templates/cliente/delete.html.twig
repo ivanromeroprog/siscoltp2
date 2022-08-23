@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SisVentas - Clientes{% endblock %}
+{% block bodytitle %}Eliminar Cliente{% endblock %}
+
+{% block body %}
+    <form action="{{ path('app_cliente_dodelete') }}" method="POST">
+        <div class="alert alert-danger">
+            <p>¿Está seguro de eliminar este Cliente?</p>
+
+            <p>ID: {{ cliente.id }} - DNI: {{ cliente.Dni }} - {{ cliente.Nombre }}{{ cliente.Apellido }}</p>
+        </div>
+
+
+        <input type="text" name="id" value="{{ cliente.id }}" />
+        <input type="text" name="_method" value="DELETE" />
+<input type="hidden" name="_token" value="{{ csrf_token('borrarcosa') }}"/>
+        <div class="text-center"> 
+            <a href="{{ path('app_cliente') }}" class="btn btn-secondary">Volver</a>
+            <input type="submit" value="Eliminar" class="btn btn-danger" />
+        </div>
+    </form>
+{% endblock %}

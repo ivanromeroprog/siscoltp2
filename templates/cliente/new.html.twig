@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 {% form_theme form 'bootstrap_5_layout.html.twig' %}
 
-{% block title %}SisVentas - Usuarios{% endblock %}
-{% block bodytitle %}Nuevo Usuario{% endblock %}
+{% block title %}SisVentas - Clientes{% endblock %}
+{% block bodytitle %}Nuevo Cliente{% endblock %}
 
 {% block body %}
     {{ form(form) }}
 
-    <a href="{{ path('app_usuario') }}" class="btn btn-secondary">Volver</a>
+    <a href="{{ path('app_cliente') }}" class="btn btn-secondary">Volver</a>
 
     {% for message in app.flashes('success') %}
         <div class="alert alert-success">

@@ -18,8 +18,8 @@ class ClienteType extends AbstractType
             ->add('Dni')
             ->add('Nombre')
             ->add('Apellido')
-            ->add('Telefono', TelType::class,['label'=>'Teléfono'])
-            ->add('Direccion', TextType::class,['label'=>'Dirección'])
+            ->add('Telefono', TelType::class,['required' => false,'label'=>'Teléfono'])
+            ->add('Direccion', TextType::class,['required' => false,'label'=>'Dirección'])
             ->add('Submit', SubmitType::class, ['label'=>'Guardar'])
         ;
     }

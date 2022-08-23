@@ -11,8 +11,8 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UsuarioRepository::class)]
-class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
-{
+class Usuario implements UserInterface, PasswordAuthenticatedUserInterface {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -33,7 +33,7 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 9)]
+    #[ORM\Column(length: 9, unique: true)]
     private ?string $Dni = null;
 
     #[ORM\Column(length: 255)]
@@ -51,23 +51,31 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $Direccion = null;
 
-    public function __construct()
-    {
+    public function __construct(?int $id = null, ?string $username = null, ?string $password = null,
+            ?string $email = null, ?string $Dni = null, ?string $Nombre = null,
+            ?string $Apellido = null, ?string $Telefono = null, ?string $Direccion = null) {
+        $this->id = $id;
+        $this->username = $username;
+        //$this->roles = $roles;
+        $this->password = $password;
+        $this->email = $email;
+        $this->Dni = $Dni;
+        $this->Nombre = $Nombre;
+        $this->Apellido = $Apellido;
+        $this->Telefono = $Telefono;
+        $this->Direccion = $Direccion;
         $this->Ventas = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
+    public function getId(): ?int {
         return $this->id;
     }
 
-    public function getUsername(): ?string
-    {
+    public function getUsername(): ?string {
         return $this->username;
     }
 
-    public function setUsername(string $username): self
-    {
+    public function setUsername(string $username): self {
         $this->username = $username;
 
         return $this;
@@ -78,16 +86,14 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @see UserInterface
      */
-    public function getUserIdentifier(): string
-    {
+    public function getUserIdentifier(): string {
         return (string) $this->username;
     }
 
     /**
      * @see UserInterface
      */
-    public function getRoles(): array
-    {
+    public function getRoles(): array {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
@@ -95,8 +101,7 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): self
-    {
+    public function setRoles(array $roles): self {
         $this->roles = $roles;
 
         return $this;
@@ -105,13 +110,11 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): string
-    {
+    public function getPassword(): string {
         return $this->password;
     }
 
-    public function setPassword(string $password): self
-    {
+    public function setPassword(string $password): self {
         $this->password = $password;
 
         return $this;
@@ -120,67 +123,56 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
-    {
+    public function eraseCredentials() {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
 
-    public function getEmail(): ?string
-    {
+    public function getEmail(): ?string {
         return $this->email;
     }
 
-    public function setEmail(string $email): self
-    {
+    public function setEmail(string $email): self {
         $this->email = $email;
 
         return $this;
     }
 
-    public function getDni(): ?string
-    {
+    public function getDni(): ?string {
         return $this->Dni;
     }
 
-    public function setDni(string $Dni): self
-    {
+    public function setDni(string $Dni): self {
         $this->Dni = $Dni;
 
         return $this;
     }
 
-    public function getNombre(): ?string
-    {
+    public function getNombre(): ?string {
         return $this->Nombre;
     }
 
-    public function setNombre(string $Nombre): self
-    {
+    public function setNombre(string $Nombre): self {
         $this->Nombre = $Nombre;
 
         return $this;
     }
 
-    public function getApellido(): ?string
-    {
+    public function getApellido(): ?string {
         return $this->Apellido;
     }
 
-    public function setApellido(string $Apellido): self
-    {
+    public function setApellido(string $Apellido): self {
         $this->Apellido = $Apellido;
 
         return $this;
     }
 
-    public function getTelefono(): ?string
-    {
+    public function getTelefono(): ?string {
         return $this->Telefono;
     }
 
-    public function setTelefono(string $Telefono): self
-    {
+    public function setTelefono(string $Telefono): self {
         $this->Telefono = $Telefono;
 
         return $this;
@@ -189,13 +181,11 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Venta>
      */
-    public function getVentas(): Collection
-    {
+    public function getVentas(): Collection {
         return $this->Ventas;
     }
 
-    public function addVenta(Venta $venta): self
-    {
+    public function addVenta(Venta $venta): self {
         if (!$this->Ventas->contains($venta)) {
             $this->Ventas->add($venta);
             $venta->setUsuario($this);
@@ -204,8 +194,7 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeVenta(Venta $venta): self
-    {
+    public function removeVenta(Venta $venta): self {
         if ($this->Ventas->removeElement($venta)) {
             // set the owning side to null (unless already changed)
             if ($venta->getUsuario() === $this) {
@@ -216,15 +205,14 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getDireccion(): ?string
-    {
+    public function getDireccion(): ?string {
         return $this->Direccion;
     }
 
-    public function setDireccion(?string $Direccion): self
-    {
+    public function setDireccion(?string $Direccion): self {
         $this->Direccion = $Direccion;
 
         return $this;
     }
+
 }
