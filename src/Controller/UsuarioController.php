@@ -26,9 +26,9 @@ class UsuarioController extends AbstractController {
 
     #[Route('/usuario', name: 'app_usuario')]
     public function index(): Response {
-        
+
         $usuarios = $this->ur->findAll();
-        
+
         return $this->render('usuario/index.html.twig', [
                     'usuarios' => $usuarios,
         ]);
@@ -41,15 +41,15 @@ class UsuarioController extends AbstractController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             $plaintextPassword = $form->get('password')->getData();
             $hashedPassword = $passwordHasher->hashPassword(
-                $usuario,
-                $plaintextPassword
+                    $usuario,
+                    $plaintextPassword
             );
             $usuario->setPassword($hashedPassword);
             $usuario->setRoles(['ROLE_USER']);
-            
+
             $this->em->persist($usuario);
             $this->em->flush();
 
@@ -57,37 +57,62 @@ class UsuarioController extends AbstractController {
 
             return $this->redirectToRoute('app_usuario');
         }
-        
+
         return $this->render('usuario/new.html.twig', [
                     'form' => $form->createView()
         ]);
     }
-    
-    
-    
+
     #[Route('/usuario/editar/{id}', name: 'app_usuario_edit')]
-    public function edit(int $id, Request $request): Response {
-        $usuario = $this->cr->find($id);
-        
-        if(is_null($usuario))
+    public function edit(int $id, Request $request, UserPasswordHasherInterface $passwordHasher): Response {
+        $usuario = $this->ur->find($id);
+
+        if (is_null($usuario))
             throw new AccessDeniedHttpException();
-        
-        $form = $this->createForm(ClienteType::class, $usuario);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->flush();
 
-            $this->addFlash('success', 'Se edito el usuario correctamente.');
 
-            return $this->redirectToRoute('app_usuario');
+
+        $form = $this->createForm(UsuarioType::class, $usuario, ['required_password' => false]);
+
+        if ($request->isMethod('POST')) {
+            $formdata = $request->get($form->getName());
+            
+
+            if ($formdata['password']['first'] === '') {
+                
+                unset($formdata['password']);
+                $form->submit($formdata, false);
+                
+            } else {
+                
+                $form->submit($formdata);
+                $plaintextPassword = $form->get('password')->getData();
+                $hashedPassword = $passwordHasher->hashPassword(
+                        $usuario,
+                        $plaintextPassword
+                );
+                $usuario->setPassword($hashedPassword);
+                
+            }
+
+            
+
+            if ($form->isSubmitted() && $form->isValid()) {
+
+                $this->em->flush();
+
+                $this->addFlash('success', 'Se edito el usuario correctamente.');
+
+                return $this->redirectToRoute('app_usuario');
+            }
         }
 
+
         return $this->render('usuario/new.html.twig', [
                     'form' => $form->createView()
         ]);
     }
-   
 
     #[Route('/usuario/delete/{id}', name: 'app_usuario_delete', methods: ['GET', 'HEAD'])]
     public function delete(int $id): Response {
@@ -95,7 +120,7 @@ class UsuarioController extends AbstractController {
         if ($id < 1)
             throw new AccessDeniedHttpException();
 
-        $usuario = $this->cr->find($id);
+        $usuario = $this->ur->find($id);
 
         return $this->render('usuario/delete.html.twig', [
                     'usuario' => $usuario
@@ -104,13 +129,13 @@ class UsuarioController extends AbstractController {
 
     #[Route('/usuario/delete', name: 'app_usuario_dodelete', methods: ['DELETE'])]
     public function doDelete(Request $request): Response {
-        
-            $submittedToken = $request->request->get('_token');
 
-            if (!$this->isCsrfTokenValid('borrarcosa', $submittedToken)) {
-                throw new AccessDeniedHttpException();
-            }
-        
+        $submittedToken = $request->request->get('_token');
+
+        if (!$this->isCsrfTokenValid('borrarcosa', $submittedToken)) {
+            throw new AccessDeniedHttpException();
+        }
+
         $id = $request->get('id');
 
         if (is_numeric($id)) {
@@ -121,9 +146,19 @@ class UsuarioController extends AbstractController {
         } else {
             throw new AccessDeniedHttpException();
         }
+
+        $usuariologeado = $this->getUser();
         
-        $usuario = $this->cr->find($id);
+        $usuario = $this->ur->find($id);
         
+        if($usuario->getId() === $usuariologeado->getId())
+        {
+            $this->addFlash('warning', 'No se puede eliminar el usuario logeado actualmente.');
+
+            return $this->redirectToRoute('app_usuario'); 
+        }
+        
+
         $this->em->remove($usuario);
         $this->em->flush();
 
@@ -131,6 +166,5 @@ class UsuarioController extends AbstractController {
 
         return $this->redirectToRoute('app_usuario');
     }
-    
 
 }

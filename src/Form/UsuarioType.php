@@ -25,7 +25,7 @@ class UsuarioType extends AbstractType
     'type' => PasswordType::class,
     'invalid_message' => 'Los campos de Clave deben ser iguales.',
     'options' => ['attr' => ['class' => 'password-field']],
-    'required' => true,
+    'required' => $options['required_password'],
     'first_options'  => ['label' => 'Clave'],
     'second_options' => ['label' => 'Repetir Clave'],
 ])
@@ -43,6 +43,7 @@ class UsuarioType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Usuario::class,
+            'required_password' => true,
         ]);
     }
 }
