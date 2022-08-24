@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+{% block title %}SisVentas - Productos{% endblock %}
+{% block bodytitle %}Nuevo Producto{% endblock %}
+
+{% block body %}
+    {{ form(form) }}
+
+    <a href="{{ path('app_producto') }}" class="btn btn-secondary">Volver</a>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+{% endblock %}

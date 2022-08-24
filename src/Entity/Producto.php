@@ -31,8 +31,12 @@ class Producto
     #[ORM\Column]
     private ?int $Stock = null;
 
-    public function __construct()
-    {
+    public function __construct(?int $id=null, ?string $Nombre=null, ?string $Descripcion=null, ?string $Precio=null, ?int $Stock=null) {
+        $this->id = $id;
+        $this->Nombre = $Nombre;
+        $this->Descripcion = $Descripcion;
+        $this->Precio = $Precio;
+        $this->Stock = $Stock;
         $this->DetallesVentas = new ArrayCollection();
     }
 

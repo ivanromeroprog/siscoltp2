@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Cliente;
-use App\Form\ClienteType;
+use App\Entity\Producto;
+use App\Form\ProductoType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[IsGranted('ROLE_USER')]
-class ClienteController extends AbstractController
+class ProductoController extends AbstractController
 {
 
     private EntityManagerInterface $em;
@@ -23,81 +23,81 @@ class ClienteController extends AbstractController
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
-        $this->cr = $this->em->getRepository(Cliente::class);
+        $this->cr = $this->em->getRepository(Producto::class);
     }
 
-    #[Route('/cliente', name: 'app_cliente')]
+    #[Route('/producto', name: 'app_producto')]
     public function index(): Response
     {
-        $clientes = $this->cr->findAll();
+        $productos = $this->cr->findAll();
 
-        return $this->render('cliente/index.html.twig', [
-            'clientes' => $clientes
+        return $this->render('producto/index.html.twig', [
+            'productos' => $productos
         ]);
     }
 
-    #[Route('/cliente/nuevo', name: 'app_cliente_new')]
+    #[Route('/producto/nuevo', name: 'app_producto_new')]
     public function new(Request $request): Response
     {
-        $cliente = new Cliente();
-        $form = $this->createForm(ClienteType::class, $cliente);
+        $producto = new Producto();
+        $form = $this->createForm(ProductoType::class, $producto);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($cliente);
+            $this->em->persist($producto);
             $this->em->flush();
 
-            $this->addFlash('success', 'Se creo el cliente correctamente.');
+            $this->addFlash('success', 'Se creo el producto correctamente.');
 
-            return $this->redirectToRoute('app_cliente');
+            return $this->redirectToRoute('app_producto');
         }
 
-        return $this->render('cliente/new.html.twig', [
+        return $this->render('producto/new.html.twig', [
             'form' => $form->createView()
         ]);
     }
 
 
-    #[Route('/cliente/editar/{id}', name: 'app_cliente_edit')]
+    #[Route('/producto/editar/{id}', name: 'app_producto_edit')]
     public function edit(int $id, Request $request): Response
     {
-        $cliente = $this->cr->find($id);
+        $producto = $this->cr->find($id);
 
-        if (is_null($cliente))
+        if (is_null($producto))
             throw new AccessDeniedHttpException();
 
-        $form = $this->createForm(ClienteType::class, $cliente);
+        $form = $this->createForm(ProductoType::class, $producto);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
 
-            $this->addFlash('success', 'Se edito el cliente correctamente.');
+            $this->addFlash('success', 'Se edito el producto correctamente.');
 
-            return $this->redirectToRoute('app_cliente');
+            return $this->redirectToRoute('app_producto');
         }
 
-        return $this->render('cliente/new.html.twig', [
+        return $this->render('producto/new.html.twig', [
             'form' => $form->createView()
         ]);
     }
 
 
-    #[Route('/cliente/delete/{id}', name: 'app_cliente_delete', methods: ['GET', 'HEAD'])]
+    #[Route('/producto/delete/{id}', name: 'app_producto_delete', methods: ['GET', 'HEAD'])]
     public function delete(int $id): Response
     {
 
         if ($id < 1)
             throw new AccessDeniedHttpException();
 
-        $cliente = $this->cr->find($id);
+        $producto = $this->cr->find($id);
 
-        return $this->render('cliente/delete.html.twig', [
-            'cliente' => $cliente
+        return $this->render('producto/delete.html.twig', [
+            'producto' => $producto
         ]);
     }
 
-    #[Route('/cliente/delete', name: 'app_cliente_dodelete', methods: ['DELETE'])]
+    #[Route('/producto/delete', name: 'app_producto_dodelete', methods: ['DELETE'])]
     public function doDelete(Request $request): Response
     {
 
@@ -118,13 +118,13 @@ class ClienteController extends AbstractController
             throw new AccessDeniedHttpException();
         }
 
-        $cliente = $this->cr->find($id);
+        $producto = $this->cr->find($id);
 
-        $this->em->remove($cliente);
+        $this->em->remove($producto);
         $this->em->flush();
 
-        $this->addFlash('success', 'Se eliminó el cliente correctamente.');
+        $this->addFlash('success', 'Se eliminó el producto correctamente.');
 
-        return $this->redirectToRoute('app_cliente');
+        return $this->redirectToRoute('app_producto');
     }
 }
