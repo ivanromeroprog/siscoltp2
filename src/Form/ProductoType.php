@@ -19,7 +19,7 @@ class ProductoType extends AbstractType
             ->add('Descripcion', TextareaType::class, ['label' => 'Descripción', 'required'=>false])
             ->add('Precio', NumberType::class, ['label'=> 'Precio ($)','html5' => true, 'scale' => 2, 'attr' => ['min' => '0','max'=>'999999999', 'step'=>'1']])
             ->add('Stock', NumberType::class, ['html5' => true, 'scale' => 0, 'attr' => ['min' => '0','max'=>'999999999', 'step'=>'1']])
-            ->add('Submit', SubmitType::class, ['label' => 'Guardar']);
+            ->add('Submit', SubmitType::class, ['label' => 'Guardar', 'attr'=>[ 'style'=>"float:right;"]]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

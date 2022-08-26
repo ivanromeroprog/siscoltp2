@@ -36,7 +36,7 @@ class UsuarioType extends AbstractType
             ->add('Apellido')
             ->add('Telefono', TelType::class, ['required' => false,'label' => 'Teléfono'])
             ->add('Direccion', TextType::class, ['required' => false,'label' => 'Dirección'])
-            ->add('Submit', SubmitType::class, ['label' => 'Guardar'])
+            ->add('Submit', SubmitType::class, ['label' => 'Guardar', 'attr'=>[ 'style'=>"float:right;"]])
         ;
     }
 
