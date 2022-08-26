@@ -14,7 +14,7 @@
 				{{ producto.id }}
 				-
 				{{ producto.Nombre }}</p>
-			<p>{{ producto.descripcion|u.truncate(100) }}</p>
+			<p>{{ producto.descripcion|u.truncate(100, '...') }}</p>
 		</div>
 
 

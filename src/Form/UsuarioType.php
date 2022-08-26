@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Usuario;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -30,7 +31,7 @@ class UsuarioType extends AbstractType
     'second_options' => ['label' => 'Repetir Clave'],
 ])
             ->add('email', EmailType::class)
-            ->add('Dni')
+            ->add('Dni', NumberType::class, ['html5' => true, 'scale' => 0, 'attr' => ['min' => '0']])
             ->add('Nombre')
             ->add('Apellido')
             ->add('Telefono', TelType::class, ['required' => false,'label' => 'Teléfono'])

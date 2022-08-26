@@ -5,7 +5,8 @@ namespace App\Form;
 use App\Entity\Producto;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,9 +16,9 @@ class ProductoType extends AbstractType
     {
         $builder
             ->add('Nombre')
-            ->add('Descripcion', TextType::class, ['label' => 'Descrición'])
-            ->add('Precio')
-            ->add('Stock', NumberType::class)
+            ->add('Descripcion', TextareaType::class, ['label' => 'Descripción', 'required'=>false])
+            ->add('Precio', NumberType::class, ['label'=> 'Precio ($)','html5' => true, 'scale' => 2, 'attr' => ['min' => '0','max'=>'999999999', 'step'=>'1']])
+            ->add('Stock', NumberType::class, ['html5' => true, 'scale' => 0, 'attr' => ['min' => '0','max'=>'999999999', 'step'=>'1']])
             ->add('Submit', SubmitType::class, ['label' => 'Guardar']);
     }
 

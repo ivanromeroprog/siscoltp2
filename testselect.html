@@ -1,125 +1,130 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- CSS only -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-<!-- JavaScript Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
-<style>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- CSS only -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+        <!-- JavaScript Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+        <style>
 
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
+            .dropdown {
+                position: relative;
+                display: inline-block;
+            }
 
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f6f6f6;
-  min-width: 100%;
-  border: 1px solid #ddd;
-  z-index: 1;
-}
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #f6f6f6;
+                min-width: 100%;
+                border: 1px solid #ddd;
+                z-index: 1;
+            }
 
-.dropdown-scroll{
-  overflow: auto;
-  max-height: 200px;
-}
+            .dropdown-scroll{
+                overflow: auto;
+                max-height: 200px;
+            }
 
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
+            .dropdown-content a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
 
-.dropdown a:hover {background-color: #ddd;}
+            .dropdown a:hover {
+                background-color: #ddd;
+            }
 
-.show {display: block;}
-</style>
-</head>
-<body>
-<h2>Search/Filter Dropdown</h2>
-<p>Click on the button to open the dropdown menu, and use the input field to search for a specific dropdown link.</p>
-<div class="input-group" onclick="buscar_cliente()" id="cliente_dropdown_cont">
-  <button class="btn btn-primary" id="button-addon1">Cliente </button>
-  <input type="hidden" id="cliente_id" name="cliente[id]"class="form-control"  placeholder="" aria-label="" readonly />
-  <input type="text" id="cliente_nombre" class="form-control"  placeholder="" aria-label="" readonly />
-  </div>
-  <div id="cliente_dropdown" class="dropdown-content">
-    <input type="text" placeholder="Buscar..." id="cliente_buscar" onkeyup="filterFunction()" class="form-control">
-    <div class="dropdown-scroll">
-    <a href="javascript:setcliente(1,'about')">About</a>
-    <a href="javascript:gebi('cliente_id').value=2">Base</a>
-    <a href="javascript:gebi('cliente_id').value=3">Blog</a>
-    <a href="javascript:gebi('cliente_id').value=4">Contact</a>
-    <a href="javascript:gebi('cliente_id').value=5">Custom</a>
-    <a href="javascript:gebi('cliente_id').value=6">Support</a>
-    <a href="javascript:gebi('cliente_id').value=7">Tools</a>
-        <a href="javascript:gebi('cliente_id').value=1">About</a>
-    <a href="javascript:gebi('cliente_id').value=2">Base</a>
-    <a href="javascript:gebi('cliente_id').value=3">Blog</a>
-    <a href="javascript:gebi('cliente_id').value=4">Contact</a>
-    <a href="javascript:gebi('cliente_id').value=5">Custom</a>
-    <a href="javascript:gebi('cliente_id').value=6">Support</a>
-    <a href="javascript:gebi('cliente_id').value=7">Tools</a>
-        <a href="javascript:gebi('cliente_id').value=1">About</a>
-    <a href="javascript:gebi('cliente_id').value=2">Base</a>
-    <a href="javascript:gebi('cliente_id').value=3">Blog</a>
-    <a href="javascript:gebi('cliente_id').value=4">Contact</a>
-    <a href="javascript:gebi('cliente_id').value=5">Custom</a>
-    <a href="javascript:gebi('cliente_id').value=6">Support</a>
-    <a href="javascript:gebi('cliente_id').value=7">Tools</a>
-    </div>
-  </div>
-</div>
+            .show {
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Search/Filter Dropdown</h2>
+        <p>Click on the button to open the dropdown menu, and use the input field to search for a specific dropdown link.</p>
+        <div class="input-group" onclick="buscar_cliente()" id="cliente_dropdown_cont">
+            <button class="btn btn-primary" id="button-addon1">Cliente </button>
+            <input type="hidden" id="cliente_id" name="cliente[id]" class="form-control" aria-label="" />
+            <input type="text" id="cliente_nombre" class="form-control"  placeholder="" aria-label="" readonly />
+        </div>
+        <div id="cliente_dropdown" class="dropdown-content">
+            <input type="text" placeholder="Buscar..." id="cliente_buscar" onkeyup="filterFunction()" class="form-control">
+            <div class="dropdown-scroll">
+                <a href="javascript:setcliente(1,'about')">About</a>
+                <a href="javascript:gebi('cliente_id').value=2">Base</a>
+                <a href="javascript:gebi('cliente_id').value=3">Blog</a>
+                <a href="javascript:gebi('cliente_id').value=4">Contact</a>
+                <a href="javascript:gebi('cliente_id').value=5">Custom</a>
+                <a href="javascript:gebi('cliente_id').value=6">Support</a>
+                <a href="javascript:gebi('cliente_id').value=7">Tools</a>
+                <a href="javascript:gebi('cliente_id').value=1">About</a>
+                <a href="javascript:gebi('cliente_id').value=2">Base</a>
+                <a href="javascript:gebi('cliente_id').value=3">Blog</a>
+                <a href="javascript:gebi('cliente_id').value=4">Contact</a>
+                <a href="javascript:gebi('cliente_id').value=5">Custom</a>
+                <a href="javascript:gebi('cliente_id').value=6">Support</a>
+                <a href="javascript:gebi('cliente_id').value=7">Tools</a>
+                <a href="javascript:gebi('cliente_id').value=1">About</a>
+                <a href="javascript:gebi('cliente_id').value=2">Base</a>
+                <a href="javascript:gebi('cliente_id').value=3">Blog</a>
+                <a href="javascript:gebi('cliente_id').value=4">Contact</a>
+                <a href="javascript:gebi('cliente_id').value=5">Custom</a>
+                <a href="javascript:gebi('cliente_id').value=6">Support</a>
+                <a href="javascript:gebi('cliente_id').value=7">Tools</a>
+            </div>
+        </div>
+        
+        <input type="number">
 
-<script>
-function setcliente(id,nombre){
-	gebi('cliente_id').value=id;
-    gebi('cliente_nombre').value=nombre;
-    buscar_cliente() ;
-}
-function gebi(elementid){
-	return document.getElementById(elementid);
-}
+        <script>
+            function setcliente(id, nombre) {
+                gebi('cliente_id').value = id;
+                gebi('cliente_nombre').value = nombre;
+                buscar_cliente();
+            }
+            function gebi(elementid) {
+                return document.getElementById(elementid);
+            }
 
-/* When the user clicks on the button,
-toggle between hiding and showing the dropdown content */
-function buscar_cliente() {
-  cd = gebi("cliente_dropdown")
-  cd.classList.toggle("show");
-  if(window.getComputedStyle(cd).display == 'block') {
-  	gebi("cliente_buscar").focus();
-  }
-}
+            /* When the user clicks on the button,
+             toggle between hiding and showing the dropdown content */
+            function buscar_cliente() {
+                cd = gebi("cliente_dropdown")
+                cd.classList.toggle("show");
+                if (window.getComputedStyle(cd).display == 'block') {
+                    gebi("cliente_buscar").focus();
+                }
+            }
 
-function filterFunction() {
-  var input, filter, ul, li, a, i;
-  input = gebi("cliente_buscar");
-  filter = input.value.toUpperCase();
-  div = gebi("cliente_dropdown");
-  a = div.getElementsByTagName("a");
-  for (i = 0; i < a.length; i++) {
-    txtValue = a[i].textContent || a[i].innerText;
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      a[i].style.display = "";
-    } else {
-      a[i].style.display = "none";
-    }
-  }
-}
+            function filterFunction() {
+                var input, filter, ul, li, a, i;
+                input = gebi("cliente_buscar");
+                filter = input.value.toUpperCase();
+                div = gebi("cliente_dropdown");
+                a = div.getElementsByTagName("a");
+                for (i = 0; i < a.length; i++) {
+                    txtValue = a[i].textContent || a[i].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        a[i].style.display = "";
+                    } else {
+                        a[i].style.display = "none";
+                    }
+                }
+            }
 
-document.addEventListener('click', function handleClickOutsideBox(event) {
-  cd = gebi("cliente_dropdown")
-  cdc = gebi("cliente_dropdown_cont");
-  
-  if(window.getComputedStyle(cd).display == 'block' && !cdc.contains(event.target) && !cd.contains(event.target)) {
-    cd.classList.toggle("show");
-  }
-});
-</script>
-Holis
-</body>
+            document.addEventListener('click', function handleClickOutsideBox(event) {
+                cd = gebi("cliente_dropdown")
+                cdc = gebi("cliente_dropdown_cont");
+
+                if (window.getComputedStyle(cd).display == 'block' && !cdc.contains(event.target) && !cd.contains(event.target)) {
+                    cd.classList.toggle("show");
+                }
+            });
+        </script>
+        Holis
+    </body>
 </html>

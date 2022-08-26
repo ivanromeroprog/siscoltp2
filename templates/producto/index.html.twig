@@ -19,6 +19,7 @@
 			<tr>
 				<th>Id</th>
 				<th>Nombre</th>
+				<th>Stock</th>
                 <th>Descripción</th>
 				<th></th>
 			</tr>
@@ -28,7 +29,8 @@
 				<tr>
 					<td>{{ producto.id }}</td>
 					<td>{{ producto.Nombre }}</td>
-					<td>{{ producto.Descripcion|u.truncate(100) }}</td>
+					<td>{{ producto.Stock }}</td>
+					<td>{{ producto.Descripcion|u.truncate(25, '...') }}</td>
 					<td>
 						<a href="{{ path('app_producto_edit',{'id':producto.id}) }}" class="btn btn-primary btn-sm">
 							<i class="bi bi-pencil-fill"></i>

@@ -19,3 +19,10 @@ html {
       font-size: 1.6rem;
     }
   }
+  
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+   -webkit-appearance: inner-spin-button;
+   opacity: 1;
+   margin-left: 10px;
+}
