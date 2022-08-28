@@ -3,12 +3,15 @@
 namespace App\Entity;
 
 use App\Repository\VentaRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: VentaRepository::class)]
+#[UniqueEntity('Factura')]
 class Venta
 {
     #[ORM\Id]
@@ -20,7 +23,7 @@ class Venta
     private ?string $Factura = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $Fecha = null;
+    private ?DateTimeInterface $Fecha = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 11, scale: 2)]
     private ?string $Total = null;
@@ -61,12 +64,12 @@ class Venta
         return $this;
     }
 
-    public function getFecha(): ?\DateTimeInterface
+    public function getFecha(): ?DateTimeInterface
     {
         return $this->Fecha;
     }
 
-    public function setFecha(\DateTimeInterface $Fecha): self
+    public function setFecha(DateTimeInterface $Fecha): self
     {
         $this->Fecha = $Fecha;
 

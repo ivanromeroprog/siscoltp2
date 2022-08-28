@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SisVentas - Ventas{% endblock %}
+{% block bodytitle %}Eliminar Venta{% endblock %}
+
+{% block body %}
+    <form action="{{ path('app_venta_dodelete') }}" method="POST">
+        <div class="alert alert-danger">
+            <p class="fw-bold">¿Está seguro de eliminar este Venta?</p>
+
+            <p>ID: {{ venta.id }} - DNI: {{ venta.Dni }} - {{ venta.Nombre }}{{ venta.Apellido }}</p>
+        </div>
+
+
+        <input type="hidden" name="id" value="{{ venta.id }}" />
+        <input type="hidden" name="_method" value="DELETE" />
+<input type="hidden" name="_token" value="{{ csrf_token('borrarcosa') }}"/>
+        <div class="text-center"> 
+            <a href="{{ path('app_venta') }}" class="btn btn-secondary">Volver</a>
+            <input type="submit" value="Eliminar" class="btn btn-danger" />
+        </div>
+    </form>
+{% endblock %}

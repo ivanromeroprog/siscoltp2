@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SisVentas - Ventas{% endblock %}
+{% block bodytitle %}Ventas{% endblock %}
+
+{% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <a href="{{ path('app_venta_new') }}" class="btn btn-success"><i class="bi bi-plus-circle-fill"></i> Nuevo</a>
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                {# <th>Id</th> #}
+                <th>Factura</th>
+                <th>Fecha</th>
+                <th>Total</th>
+                <th>Estado</th>
+                {# <th>Teléfono</th>
+                <th>Dirección</th> #}
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for venta in ventas %}
+                <tr>
+                    {# <td>{{ venta.id }}</td> #}
+                    <td>{{ venta.Factura }}</td>
+                    <td>{{ venta.Fecha }}</td>
+                    <td>{{ venta.Total }}</td>
+                    <td>{{ venta.Estado }}</td>
+                    {# <td>{{ venta.Telefono }}</td>
+                    <td>{{ venta.Direccion }}</td> #}
+                    <td><a href="{{ path('app_venta_edit',{'id':venta.id}) }}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-fill"></i></a>
+                        <a href="{{ path('app_venta_delete',{'id':venta.id}) }}" class="btn btn-danger btn-sm"><i class="bi bi-trash-fill"></i></a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

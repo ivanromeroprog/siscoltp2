@@ -14,53 +14,47 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[IsGranted('ROLE_USER')]
-class ClienteController extends AbstractController
-{
+class ClienteController extends AbstractController {
 
     private EntityManagerInterface $em;
     private EntityRepository $cr;
 
-    public function __construct(EntityManagerInterface $em)
-    {
+    public function __construct(EntityManagerInterface $em) {
         $this->em = $em;
         $this->cr = $this->em->getRepository(Cliente::class);
     }
 
     #[Route('/cliente', name: 'app_cliente')]
-    public function index(): Response
-    {
+    public function index(): Response {
         $clientes = $this->cr->findAll();
 
         return $this->render('cliente/index.html.twig', [
-            'clientes' => $clientes
+                    'clientes' => $clientes
         ]);
     }
 
     #[Route('/cliente/nuevo', name: 'app_cliente_new')]
-    public function new(Request $request): Response
-    {
+    public function new(Request $request): Response {
         $cliente = new Cliente();
         $form = $this->createForm(ClienteType::class, $cliente);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($cliente);
+
             $this->em->flush();
 
             $this->addFlash('success', 'Se creo el cliente correctamente.');
-
             return $this->redirectToRoute('app_cliente');
         }
 
         return $this->render('cliente/new.html.twig', [
-            'form' => $form->createView()
+                    'form' => $form->createView()
         ]);
     }
 
-
     #[Route('/cliente/editar/{id}', name: 'app_cliente_edit')]
-    public function edit(int $id, Request $request): Response
-    {
+    public function edit(int $id, Request $request): Response {
         $cliente = $this->cr->find($id);
 
         if (is_null($cliente))
@@ -78,14 +72,12 @@ class ClienteController extends AbstractController
         }
 
         return $this->render('cliente/new.html.twig', [
-            'form' => $form->createView()
+                    'form' => $form->createView()
         ]);
     }
 
-
     #[Route('/cliente/delete/{id}', name: 'app_cliente_delete', methods: ['GET', 'HEAD'])]
-    public function delete(int $id): Response
-    {
+    public function delete(int $id): Response {
 
         if ($id < 1)
             throw new AccessDeniedHttpException();
@@ -93,13 +85,12 @@ class ClienteController extends AbstractController
         $cliente = $this->cr->find($id);
 
         return $this->render('cliente/delete.html.twig', [
-            'cliente' => $cliente
+                    'cliente' => $cliente
         ]);
     }
 
     #[Route('/cliente/delete', name: 'app_cliente_dodelete', methods: ['DELETE'])]
-    public function doDelete(Request $request): Response
-    {
+    public function doDelete(Request $request): Response {
 
         $submittedToken = $request->request->get('_token');
 
@@ -127,4 +118,5 @@ class ClienteController extends AbstractController
 
         return $this->redirectToRoute('app_cliente');
     }
+
 }

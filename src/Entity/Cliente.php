@@ -3,12 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\ClienteRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ClienteRepository::class)]
+#[UniqueEntity('Dni')]
 class Cliente
 {
     #[ORM\Id]
@@ -149,5 +150,9 @@ class Cliente
         }
 
         return $this;
+    }
+    
+    public function __toString() {
+        return $this->Apellido . ', ' . $this->Nombre;
     }
 }
