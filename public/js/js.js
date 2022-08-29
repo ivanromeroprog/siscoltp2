@@ -14,11 +14,21 @@ window.addEventListener("load", function () {
             });
 
     //Boton eliminar detalles
+    //Actualizar Stock al iniciar
     document
             .querySelectorAll('tbody.detalles tr')
             .forEach((item) => {
                 addFormDeleteLink(item)
+                updateStock(item);
             })
+
+    //Actualizar stock cuando cambia valor
+    document
+            .querySelectorAll('tbody.detalles tr')
+            .forEach((item) => {
+
+            })
+
 });
 
 const newChoisesJs = (item) => {
@@ -45,12 +55,18 @@ const addFormToCollection = (e) => {
     collectionHolder.insertBefore(item, collectionHolder.firstChild);
     ;
 
-    addFormDeleteLink(item)
+    //Agregar link para borrar
+    addFormDeleteLink(item);
 
+    //Agregar choises.js
     item.querySelectorAll('.js-choice')
             .forEach((item) => {
-                newChoisesJs(item)
-            })
+                newChoisesJs(item);
+
+            });
+
+    //Stock
+    updateStock(item);
 
     collectionHolder.dataset.index++;
 };
@@ -66,4 +82,39 @@ const addFormDeleteLink = (item) => {
             item.remove()
         }
     });
+}
+
+const updateStock = (item) => {
+
+    var stockel;
+    var prodel;
+    var cantel;
+    item.querySelectorAll('.producto_stock')
+            .forEach((stock) => {
+                stockel = stock;
+            });
+    item.querySelectorAll('.js-choice')
+            .forEach((prod) => {
+                prodel = prod;
+            });
+            
+    //ACTUALIZAR STOCK
+    stockel.value = prodel.value;
+            
+    item.querySelectorAll('.producto_cantidad')
+            .forEach((cant) => {
+                cantel = cant;
+                cantel.setAttribute('title', 'Stock Actual: ' + stockel.value);
+                new bootstrap.Tooltip(cantel);
+            });
+    
+    cantel.setAttribute('max',stockel.value);
+            
+
+    
+    prodel.addEventListener("change", function () {
+        //Cambiar el valor del stock aquí
+        updateStock(item);
+    })
+
 }
