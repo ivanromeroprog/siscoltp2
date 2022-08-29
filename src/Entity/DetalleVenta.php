@@ -32,6 +32,13 @@ class DetalleVenta
     {
         return $this->id;
     }
+    public function __construct(?int $id = null, ?int $Cantidad = null, ?string $CostoUnitario = null, ?Venta $venta = null, ?Producto $producto = null) {
+        $this->id = $id;
+        $this->Cantidad = $Cantidad;
+        $this->CostoUnitario = $CostoUnitario;
+        $this->venta = $venta;
+        $this->producto = $producto;
+    }
 
     public function getCantidad(): ?int
     {

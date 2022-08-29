@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\DetalleVenta;
+use App\Entity\Producto;
 use App\Entity\Venta;
 use App\Form\VentaType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -40,6 +42,14 @@ class VentaController extends AbstractController
     public function new(Request $request): Response
     {
         $venta = new Venta();
+
+        // dummy code - add some example tags to the task
+        // (otherwise, the template will render an empty list of tags)
+        
+        $detalle1 = new DetalleVenta(null,1,10.5,null,$this->em->getRepository(Producto::class)->find(1));
+        $venta->getDetalles()->add($detalle1);
+        // end dummy code
+        
         $form = $this->createForm(VentaType::class, $venta);
         $form->handleRequest($request);
         
