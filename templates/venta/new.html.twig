@@ -23,11 +23,11 @@
 			</tr>
 		</thead>
 		<tbody class="detalles" data-index="{{ form.detalles|length > 0 ? form.detalles|last.vars.name + 1 : 0 }}"
-    data-prototype="<td>{{ form_row(form.detalles.vars.prototype.producto)|e('html_attr') }}</td><td>{{ form_row(form.detalles.vars.prototype.Cantidad)|e('html_attr') }}</td>">
+    data-prototype="{{ '<td><input type="hidden" value="0" class="producto_stock" />'|e('html_attr') }}{{ form_row(form.detalles.vars.prototype.producto)|e('html_attr') }}{{'</td><td>'|e('html_attr') }}{{ form_row(form.detalles.vars.prototype.Cantidad)|e('html_attr') }}</td>">
         
         {% for detalle in form.detalles %}
             <tr>
-                <td style="width: 80%">{{ form_row(detalle.producto) }}</td>
+                <td style="width: 80%"><input type="hidden" value="0" class="producto_stock" />{{ form_row(detalle.producto) }}</td>
                 <td style="width: 15%">{{ form_row(detalle.Cantidad) }}</td>
             </tr>
         {% endfor %}

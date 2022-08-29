@@ -15,8 +15,16 @@ class DetalleVentaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('producto', EntityType::class, ['class' => Producto::class, 'label' => false, 'attr' => ['class' => 'js-choice']])
-            ->add('Cantidad', NumberType::class, ['html5' => true, 'scale' => 0, 'label' => false, 'attr' => ['min' => '0', 'max' => '999999999', 'step' => '1']])
+            ->add('producto', EntityType::class,
+                    ['class' => Producto::class, 'label' => false,
+                        'attr' => ['class' => 'js-choice']])
+            ->add('Cantidad', NumberType::class,
+                    ['html5' => true, 'scale' => 0, 'label' => false,
+                        'attr' => ['min' => '0', 'max' => '999999999',
+                        'step' => '1', 
+                        'data-bs-toggle'=>'tooltip',
+                        'data-bs-placement'=>'left',
+                        'title'=>'Stock Actual: X','class'=>'producto_cantidad']])
             //->add('CostoUnitario', NumberType::class, ['label'=> 'CostoUnitario','html5' => true, 'scale' => 2, 'attr' => ['min' => '0','max'=>'999999999', 'step'=>'1']])
             //->add('venta')
 
