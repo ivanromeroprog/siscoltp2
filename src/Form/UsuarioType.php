@@ -23,21 +23,20 @@ class UsuarioType extends AbstractType
             ->add('username', TextType::class, ['label' => 'Nombre de Usuario'])
             //->add('roles')
             ->add('password', RepeatedType::class, [
-    'type' => PasswordType::class,
-    'invalid_message' => 'Los campos de Clave deben ser iguales.',
-    'options' => ['attr' => ['class' => 'password-field']],
-    'required' => $options['required_password'],
-    'first_options'  => ['label' => 'Clave'],
-    'second_options' => ['label' => 'Repetir Clave'],
-])
+                'type' => PasswordType::class,
+                'invalid_message' => 'Los campos de Clave deben ser iguales.',
+                'options' => ['attr' => ['class' => 'password-field']],
+                'required' => $options['required_password'],
+                'first_options'  => ['label' => 'Clave'],
+                'second_options' => ['label' => 'Repetir Clave'],
+            ])
             ->add('email', EmailType::class)
             ->add('Dni', NumberType::class, ['html5' => true, 'scale' => 0, 'attr' => ['min' => '0']])
             ->add('Nombre')
             ->add('Apellido')
-            ->add('Telefono', TelType::class, ['required' => false,'label' => 'Teléfono'])
-            ->add('Direccion', TextType::class, ['required' => false,'label' => 'Dirección'])
-            ->add('Submit', SubmitType::class, ['label' => 'Guardar', 'attr'=>[ 'style'=>"float:right;"]])
-        ;
+            ->add('Telefono', TelType::class, ['required' => false, 'label' => 'Teléfono'])
+            ->add('Direccion', TextType::class, ['required' => false, 'label' => 'Dirección'])
+            ->add('Submit', SubmitType::class, ['label' => 'Guardar', 'attr' => ['style' => "float:right;"]]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

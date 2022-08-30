@@ -27,6 +27,14 @@ tbody.detalles div.mb-3{
      padding: 20px;
    }
 }
+
+input {
+  border-style: dashed !important;
+}
+
+input:required, input.falserequired{
+  border-style: solid !important;
+}
 /*
 html {
     font-size: 1rem;

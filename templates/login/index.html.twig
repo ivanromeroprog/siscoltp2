@@ -13,14 +13,12 @@
         <div class="col col-md-5 mx-auto">
         <div class="mb-3">
             <label for="username" class="form-label required">Nombre de Usuario:</label>
-            <input type="text" id="username" name="_username" value="{{ last_username }}"class="form-control"/>
+            <input type="text" id="username" name="_username" value="{{ last_username }}"class="form-control" required />
         </div>
         <div class="mb-3">
             <label for="password" class="form-label required">Clave:</label>
-            <input type="password" id="password" name="_password"class="form-control"/>
+            <input type="password" id="password" name="_password"class="form-control" required />
         </div>
-        {# If you want to control the URL the user is redirected to on success
-         #}
         <input type="hidden" name="_target_path" value="/"/>
         <div class="mb-3 text-center">
         <button type="submit" class="btn btn-primary">Ingresar</button>
