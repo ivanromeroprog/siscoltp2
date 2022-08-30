@@ -26,6 +26,7 @@ class Producto
     private ?string $Precio = null;
 
     #[ORM\OneToMany(mappedBy: 'producto', targetEntity: DetalleVenta::class)]
+    
     private Collection $DetallesVentas;
 
     #[ORM\Column]
@@ -122,6 +123,7 @@ class Producto
 
         return $this;
     }
+
     
     public function __toString() {
         return $this->Nombre . ' - $' . $this->Precio ;

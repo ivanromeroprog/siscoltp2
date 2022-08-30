@@ -75,46 +75,70 @@ const addFormDeleteLink = (item) => {
     const removeFormButton = document.createElement('td');
     removeFormButton.innerHTML = '<button class="btn btn-danger btn-sm"><i class="bi bi-trash-fill"></i></button>';
     item.append(removeFormButton);
+    $(removeFormButton.firstChild).confirmButton({
+
+  confirm:"¿Esta seguro de quitar este producto?",
+  canceltxt: "Cancelar",
+  confirmtxt: "Confirmar",
+  titletxt: "Atención"
+
+});
+
     removeFormButton.firstChild.addEventListener('click', (e) => {
         e.preventDefault();
         // remove the tr for the form
-        if (confirm('¿Está seguro de eliminar?')) {
+        //if (confirm('¿Está seguro de eliminar?')) {
             item.remove()
-        }
+        //}
     });
 }
 
 const updateStock = (item) => {
 
-    var stockel;
-    var prodel;
-    var cantel;
+    var stockEl;
+    var prodEl;
+    var cantEl;
+
+    //Buscar el control de stock
     item.querySelectorAll('.producto_stock')
             .forEach((stock) => {
-                stockel = stock;
+                stockEl = stock;
             });
+    
+    //Buscar el control del producto
     item.querySelectorAll('.js-choice')
             .forEach((prod) => {
-                prodel = prod;
+                prodEl = prod;
             });
             
-    //ACTUALIZAR STOCK
-    stockel.value = prodel.value;
-            
+    //Actualizar el control de Stock con el valor del producto seleccionado
+    ps.forEach((v) => {
+        if (v.id == prodEl.value) {
+            stockEl.value = v.Stock;
+        }
+    });
+    
+    //Buscar el control de Cantidad y agregarle el tooltip de Stock
     item.querySelectorAll('.producto_cantidad')
             .forEach((cant) => {
-                cantel = cant;
-                cantel.setAttribute('title', 'Stock Actual: ' + stockel.value);
-                new bootstrap.Tooltip(cantel);
+                cantEl = cant;
+                cantEl.setAttribute('title', 'Stock Actual: ' + stockEl.value);
+                new bootstrap.Tooltip(cantEl);
             });
-    
-    cantel.setAttribute('max',stockel.value);
-            
 
+    //Configurar el valor máximo y el actual para no superar el Stock
+    cantEl.setAttribute('max', stockEl.value);
+    if(cantEl.value == ''){
+        cantEl.value = 1;
+    }
+    if (parseInt(cantEl.value) > parseInt(stockEl.value)) {
+        //alert(cantEl.value + ' ' + stockEl.value + (parseInt(cantEl.value) > parseInt(stockEl.value)));
+        cantEl.value = stockEl.value;
+    }
     
-    prodel.addEventListener("change", function () {
-        //Cambiar el valor del stock aquí
+    //Agregar esta función al vento de cambio de Valor del Producto
+    prodEl.onchange = function () {
         updateStock(item);
-    })
+    }
 
 }

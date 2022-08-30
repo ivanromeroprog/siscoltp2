@@ -31,7 +31,7 @@ class Venta
     #[ORM\Column(length: 15)]
     private ?string $Estado = null;
 
-    #[ORM\OneToMany(mappedBy: 'venta', targetEntity: DetalleVenta::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'venta', targetEntity: DetalleVenta::class, orphanRemoval: true, cascade: ['persist'])]
     private Collection $detalles;
 
     #[ORM\ManyToOne(inversedBy: 'Ventas')]

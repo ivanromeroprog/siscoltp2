@@ -20,7 +20,7 @@ class VentaType extends AbstractType {
                 ->add('cliente', EntityType::class,
                         ['class' => Cliente::class, 'attr' => ['class' => 'js-choice']])
                 ->add('Factura', TextType::class,
-                        ['required' => false])
+                        ['required' => true])
                 ->add('Fecha', DateTimeType::class,
                         ['html5' => true, 'widget' => 'single_text', 'attr' => ['placeholder' => 'aaaa-mm-ddThh:mm:ss']])
                 //->add('Total')
@@ -28,8 +28,11 @@ class VentaType extends AbstractType {
                 //->add('usuario')
                 ->add('detalles', CollectionType::class,
                         ['entry_type' => DetalleVentaType::class,
+                                
+                            'label' => false,
                             'entry_options' => ['label' => false],
                             'allow_add' => true,
+                            'by_reference' => false,
                         ])
                 ->add('Submit', SubmitType::class, ['label' => 'Guardar', 'attr' => ['style' => "float:right;"]])
         ;

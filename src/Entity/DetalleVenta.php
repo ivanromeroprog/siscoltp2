@@ -26,6 +26,7 @@ class DetalleVenta
 
     #[ORM\ManyToOne(inversedBy: 'DetallesVentas')]
     #[ORM\JoinColumn(nullable: false)]
+    //#[ORM\OrderBy({"name" = "ASC"})]
     private ?Producto $producto = null;
 
     public function getId(): ?int

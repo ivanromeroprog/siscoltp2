@@ -38,6 +38,17 @@ class ProductoRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    /**
+     * @return Producto[] Returns an array of Producto objects
+     */
+    public function findAllStock(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select(['p.id','p.Stock'])
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
 //    /**
 //     * @return Producto[] Returns an array of Producto objects

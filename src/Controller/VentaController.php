@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\DetalleVenta;
 use App\Entity\Producto;
+use App\Entity\Usuario;
 use App\Entity\Venta;
 use App\Form\VentaType;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -14,67 +15,113 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[IsGranted('ROLE_USER')]
-class VentaController extends AbstractController
-{
+class VentaController extends AbstractController {
 
     private EntityManagerInterface $em;
     private EntityRepository $cr;
 
-    public function __construct(EntityManagerInterface $em)
-    {
+    public function __construct(EntityManagerInterface $em) {
         $this->em = $em;
         $this->cr = $this->em->getRepository(Venta::class);
     }
 
     #[Route('/venta', name: 'app_venta')]
-    public function index(): Response
-    {
+    public function index(): Response {
         $ventas = $this->cr->findAll();
 
         return $this->render('venta/index.html.twig', [
-            'ventas' => $ventas
+                    'ventas' => $ventas
         ]);
     }
 
     #[Route('/venta/nuevo', name: 'app_venta_new')]
-    public function new(Request $request): Response
-    {
+    public function new(Request $request): Response {
         $venta = new Venta();
+        $venta->setFecha(new DateTime());
 
+        $pr = $this->em->getRepository(Producto::class);
+        $productos_stock = $pr->findAllStock();
+        //dd($productos_stock);
+        //die();
         // dummy code - add some example tags to the task
         // (otherwise, the template will render an empty list of tags)
-        
-        $detalle1 = new DetalleVenta(null,1,10.5,null,$this->em->getRepository(Producto::class)->find(1));
-        $venta->getDetalles()->add($detalle1);
+        //$detalle1 = new DetalleVenta(null,1,10.5,null,$this->em->getRepository(Producto::class)->find(1));
+        //$venta->getDetalles()->add($detalle1);
         // end dummy code
-        
+
         $form = $this->createForm(VentaType::class, $venta);
         $form->handleRequest($request);
-        
+
         //dd($form);
-       // die();
+        // die();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($venta);
-            $this->em->flush();
 
-            $this->addFlash('success', 'Se creo el venta correctamente.');
+            $detalles = $venta->getDetalles();
+            $total = 0;
+            $error = '';
+            //$prodlist = [];
 
-            return $this->redirectToRoute('app_venta');
+            foreach ($detalles as $k => $detalle) {
+                
+                if($detalles[$k]->getCantidad() < 1)
+                {
+                    unset($detalles[$k]);
+                }
+                else
+                {
+                $detalles[$k]->setCostoUnitario($detalle->getProducto()->getPrecio());
+                $detalle->getProducto()->setStock($detalle->getProducto()->getStock() - $detalle->getCantidad());
+                $total = $total + ($detalles[$k]->getCostoUnitario() * $detalles[$k]->getCantidad());
+
+                if ($detalle->getProducto()->getStock() < 0) {
+                    $error = "No puedes vender tantos/as " . $detalle->getProducto()->getNombre() . ". Revisa tu pedido.";
+                    break;
+                }
+                }
+
+                //$prodlist[] = $detalle->getProducto();
+            }
+            if(count($detalles) < 1){
+                $error = "Debe seleccionar un producto para vender.";
+            }
+
+            //$usuario = $this->getUser();
+            //dd($detalles, $total, $error, $usuario);
+            //die();
+
+            if ($error === '') {
+
+                $venta->setTotal($total);
+                $venta->setEstado('Normal');
+                $venta->setUsuario($this->getUser());
+
+                $this->em->persist($venta);
+                $this->em->flush();
+
+                $this->addFlash('success', 'Se creo la venta correctamente.');
+
+                return $this->redirectToRoute('app_venta');
+            } else {
+                $this->addFlash('error', $error);
+            }
         }
 
         return $this->render('venta/new.html.twig', [
-            'form' => $form->createView()
+                    'form' => $form->createView(),
+                    'productos_stock' => json_encode($productos_stock)
         ]);
     }
 
-
     #[Route('/venta/editar/{id}', name: 'app_venta_edit')]
-    public function edit(int $id, Request $request): Response
-    {
+    public function edit(int $id, Request $request): Response {
         $venta = $this->cr->find($id);
+
+        $pr = $this->em->getRepository(Producto::class);
+        $productos_stock = $pr->findAllStock();
 
         if (is_null($venta))
             throw new AccessDeniedHttpException();
@@ -91,14 +138,13 @@ class VentaController extends AbstractController
         }
 
         return $this->render('venta/new.html.twig', [
-            'form' => $form->createView()
+                    'form' => $form->createView(),
+                    'productos_stock' => json_encode($productos_stock)
         ]);
     }
 
-
     #[Route('/venta/delete/{id}', name: 'app_venta_delete', methods: ['GET', 'HEAD'])]
-    public function delete(int $id): Response
-    {
+    public function delete(int $id): Response {
 
         if ($id < 1)
             throw new AccessDeniedHttpException();
@@ -106,13 +152,12 @@ class VentaController extends AbstractController
         $venta = $this->cr->find($id);
 
         return $this->render('venta/delete.html.twig', [
-            'venta' => $venta
+                    'venta' => $venta
         ]);
     }
 
     #[Route('/venta/delete', name: 'app_venta_dodelete', methods: ['DELETE'])]
-    public function doDelete(Request $request): Response
-    {
+    public function doDelete(Request $request): Response {
 
         $submittedToken = $request->request->get('_token');
 
@@ -140,5 +185,5 @@ class VentaController extends AbstractController
 
         return $this->redirectToRoute('app_venta');
     }
-}
 
+}

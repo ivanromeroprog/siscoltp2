@@ -28,13 +28,13 @@
                 <tr>
                     {# <td>{{ venta.id }}</td> #}
                     <td>{{ venta.Factura }}</td>
-                    <td>{{ venta.Fecha }}</td>
-                    <td>{{ venta.Total }}</td>
+                    <td>{{ venta.Fecha|date("d/m/Y") }}</td>
+                    <td>$ {{ venta.Total }}</td>
                     <td>{{ venta.Estado }}</td>
                     {# <td>{{ venta.Telefono }}</td>
                     <td>{{ venta.Direccion }}</td> #}
-                    <td><a href="{{ path('app_venta_edit',{'id':venta.id}) }}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-fill"></i></a>
-                        <a href="{{ path('app_venta_delete',{'id':venta.id}) }}" class="btn btn-danger btn-sm"><i class="bi bi-trash-fill"></i></a></td>
+                    <td><a href="{{ path('app_venta_edit',{'id':venta.id}) }}" class="btn btn-primary btn-sm"><i class="bi bi-card-text"></i></a>
+                        <a href="{{ path('app_venta_delete',{'id':venta.id}) }}" class="btn btn-danger btn-sm"><i class="bi bi-x-circle"></i></a></td>
                 </tr>
             {% endfor %}
         </tbody>
