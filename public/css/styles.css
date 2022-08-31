@@ -1,18 +1,18 @@
 
-  
+
 input[type='number']::-webkit-outer-spin-button,
 input[type='number']::-webkit-inner-spin-button {
-   -webkit-appearance: inner-spin-button;
-   opacity: 1;
-   margin-left: 10px;
+    -webkit-appearance: inner-spin-button;
+    opacity: 1;
+    margin-left: 10px;
 }
 
 .choices__inner{
-  border-radius: 6px !important;
-  background-color: #fff !important;
-  min-height: 38px !important;
-  height: 38px !important;
-  padding: 3.75px 5.5px !important;
+    border-radius: 6px !important;
+    background-color: #fff !important;
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 3.75px 5.5px !important;
 }
 
 tbody.detalles td{
@@ -22,39 +22,33 @@ tbody.detalles td{
 tbody.detalles div.mb-3{
     margin:0 !important;
 }
-@media (min-width:480px) {
-   .cuerpo {
-     padding: 20px;
-   }
-}
 
 input, textarea {
-  border-style: dashed !important;
+    border-style: dashed !important;
 }
 
 input:required, input.falserequired, textarea:required, textarea.falserequired{
-  border-style: solid !important;
+    border-style: solid !important;
 }
-/*
-html {
-    font-size: 1rem;
-  }
-  
-  @include media-breakpoint-up(sm) {
-    html {
-      font-size: 1.2rem;
+
+.dataTables_length{
+    display:none;
+}
+
+@media (min-width:600px) {
+    .cuerpo {
+        padding: 20px;
     }
-  }
-  
-  @include media-breakpoint-up(md) {
-    html {
-      font-size: 1.4rem;
+
+
+}
+
+@media (max-width: 600px) {
+    #tabla thead, #tablaventa thead{
+        font-size: 0.8em;
     }
-  }
-  
-  @include media-breakpoint-up(lg) {
-    html {
-      font-size: 1.6rem;
+
+    #tabla tbody, #tablaventa tbody,#tabla tfoot, #tablaventa tfoot{
+        font-size: 0.75em;
     }
-  }
-*/
+}

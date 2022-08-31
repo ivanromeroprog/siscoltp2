@@ -9,9 +9,10 @@
             <p class="fw-bold">¿Está seguro de anular este Venta?</p>
             <p>El stock sera devuelto a los productos correspondientes.</p>
             <p>ID: {{ venta.id }} - Nº de Factura: {{ venta.Factura }}</p>
-            {{ include('venta/remito.html.twig', with_context = true) }}
+            
         </div>
 
+{{ include('venta/remito.html.twig', with_context = true) }}
 
         <input type="hidden" name="id" value="{{ venta.id }}" />
         <input type="hidden" name="_method" value="DELETE" />

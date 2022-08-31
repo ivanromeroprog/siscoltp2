@@ -1,2 +1,48 @@
-{# empty Twig template #}
-TEST
+
+<table class="table table-sm table-condensed" id="tablaventa">
+        <tr>
+            {# <th>Id</th> #}
+            <th scope="row">Cliente</th>
+            <td>{{ venta.cliente }}</td>
+            <th scope="row">Fecha</th>
+            <td>{{ venta.Fecha|date("d/m/Y") }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Nº Factura</th>
+            <td>{{ venta.Factura }}</td>
+            <th scope="row">Cod. Venta</th>
+            <td>{{ venta.id }}</td>
+        </tr>
+</table>
+<table class="table table-sm table-condensed" id="tabla">
+    <thead>
+        <tr>
+            {# <th>Id</th> #}
+            <th>Cod.</th>
+            <th>Producto</th>
+            <th>Precio Unitario</th>
+            <th>Cantidad</th>
+            <th>Sub-Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for detalle in venta.getDetalles %}
+            <tr>
+                <td>{{ detalle.id }}</td>
+                <td>{{ detalle.Producto.nombre }}</td>
+                <td>{{ detalle.CostoUnitario }}</td>
+                <td>{{ detalle.Cantidad }}</td>
+                <td>{{ (detalle.CostoUnitario * detalle.Cantidad)|number_format(2, '.', ',') }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            {# <th>Id</th> #}
+            <th colspan="3"></th>
+            <th>Total</th>
+            <th>{{ venta.Total }}</th>
+        </tr>
+    </tfoot>
+</table>
+        

@@ -18,17 +18,27 @@ window.addEventListener("load", function () {
     document
             .querySelectorAll('tbody.detalles tr')
             .forEach((item) => {
-                addFormDeleteLink(item)
+                addFormDeleteLink(item);
                 updateStock(item);
-            })
+            });
 
     //Actualizar stock cuando cambia valor
     document
             .querySelectorAll('tbody.detalles tr')
             .forEach((item) => {
 
-            })
+            });
 
+    //Data Table
+    $('#tabla').DataTable({
+        language: dtlang,
+        order: []
+    });
+    
+    $('#tablaventa').DataTable({
+        language: dtlang,
+        order: []
+    });
 });
 
 const newChoisesJs = (item) => {
@@ -38,7 +48,7 @@ const newChoisesJs = (item) => {
         noChoicesText: 'No hay opciones para seleccionar',
         itemSelectText: 'Presione para seleccionar'
     });
-}
+};
 
 const addFormToCollection = (e) => {
     const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
@@ -77,18 +87,18 @@ const addFormDeleteLink = (item) => {
     item.append(removeFormButton);
     $(removeFormButton.firstChild).confirmButton({
 
-  confirm:"¿Esta seguro de quitar este producto?",
-  canceltxt: "Cancelar",
-  confirmtxt: "Confirmar",
-  titletxt: "Atención"
+        confirm: "¿Esta seguro de quitar este producto?",
+        canceltxt: "Cancelar",
+        confirmtxt: "Confirmar",
+        titletxt: "Atención"
 
-});
+    });
 
     removeFormButton.firstChild.addEventListener('click', (e) => {
         e.preventDefault();
         // remove the tr for the form
         //if (confirm('¿Está seguro de eliminar?')) {
-            item.remove()
+        item.remove();
         //}
     });
 }
@@ -104,20 +114,20 @@ const updateStock = (item) => {
             .forEach((stock) => {
                 stockEl = stock;
             });
-    
+
     //Buscar el control del producto
     item.querySelectorAll('.js-choice')
             .forEach((prod) => {
                 prodEl = prod;
             });
-            
+
     //Actualizar el control de Stock con el valor del producto seleccionado
     ps.forEach((v) => {
         if (v.id == prodEl.value) {
             stockEl.value = v.Stock;
         }
     });
-    
+
     //Buscar el control de Cantidad y agregarle el tooltip de Stock
     item.querySelectorAll('.producto_cantidad')
             .forEach((cant) => {
@@ -128,17 +138,17 @@ const updateStock = (item) => {
 
     //Configurar el valor máximo y el actual para no superar el Stock
     cantEl.setAttribute('max', stockEl.value);
-    if(cantEl.value == ''){
+    if (cantEl.value == '') {
         cantEl.value = 1;
     }
     if (parseInt(cantEl.value) > parseInt(stockEl.value)) {
         //alert(cantEl.value + ' ' + stockEl.value + (parseInt(cantEl.value) > parseInt(stockEl.value)));
         cantEl.value = stockEl.value;
     }
-    
+
     //Agregar esta función al vento de cambio de Valor del Producto
     prodEl.onchange = function () {
         updateStock(item);
-    }
+    };
 
-}
+};

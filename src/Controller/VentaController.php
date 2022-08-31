@@ -46,19 +46,11 @@ class VentaController extends AbstractController {
 
         $pr = $this->em->getRepository(Producto::class);
         $productos_stock = $pr->findAllStock();
-        //dd($productos_stock);
-        //die();
-        // dummy code - add some example tags to the task
-        // (otherwise, the template will render an empty list of tags)
-        //$detalle1 = new DetalleVenta(null,1,10.5,null,$this->em->getRepository(Producto::class)->find(1));
-        //$venta->getDetalles()->add($detalle1);
-        // end dummy code
+
 
         $form = $this->createForm(VentaType::class, $venta);
         $form->handleRequest($request);
 
-        //dd($form);
-        // die();
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -66,7 +58,6 @@ class VentaController extends AbstractController {
             $detalles_productos_id = [];
             $total = 0;
             $error = '';
-            //$prodlist = [];
 
             foreach ($detalles as $k => $detalle) {
 
@@ -97,16 +88,10 @@ class VentaController extends AbstractController {
                         break;
                     }
                 }
-
-                //$prodlist[] = $detalle->getProducto();
             }
             if (count($detalles) < 1) {
                 $error = "Debe seleccionar un producto para vender.";
             }
-
-            //$usuario = $this->getUser();
-            //dd($detalles, $total, $error, $usuario);
-            //die();
 
             if ($error === '') {
 
@@ -117,7 +102,7 @@ class VentaController extends AbstractController {
                 $this->em->persist($venta);
                 $this->em->flush();
 
-                $this->addFlash('success', 'Se realizó la venta correctamente.');
+                $this->addFlash('success', 'Se realizó la venta correctamente. Puede <a href="'. $this->generateUrl('app_venta_view',['id' => $venta->getId(),'print' => 'print']) .'">imprimir el remito aquí</a>.');
 
                 return $this->redirectToRoute('app_venta');
             } else {
@@ -131,30 +116,14 @@ class VentaController extends AbstractController {
         ]);
     }
 
-    #[Route('/venta/editar/{id}', name: 'app_venta_edit')]
-    public function edit(int $id, Request $request): Response {
+    #[Route('/venta/remito/{id}/{print}', name: 'app_venta_view')]
+    public function edit(int $id, string $print = 'no'): Response {
         $venta = $this->cr->find($id);
 
-        $pr = $this->em->getRepository(Producto::class);
-        $productos_stock = $pr->findAllStock();
-
-        if (is_null($venta))
-            throw new AccessDeniedHttpException();
-
-        $form = $this->createForm(VentaType::class, $venta);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->flush();
-
-            $this->addFlash('success', 'Se edito el venta correctamente.');
-
-            return $this->redirectToRoute('app_venta');
-        }
-
-        return $this->render('venta/new.html.twig', [
-                    'form' => $form->createView(),
-                    'productos_stock' => json_encode($productos_stock)
+        return $this->render('venta/view.html.twig', [
+                    'venta' => $venta,
+                    'print' => $print
+                
         ]);
     }
 
