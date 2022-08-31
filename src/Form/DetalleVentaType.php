@@ -20,7 +20,8 @@ class DetalleVentaType extends AbstractType {
                             'attr' => ['class' => 'js-choice'],
                             'query_builder' => function (ProductoRepository $er) {
                                 return $er->createQueryBuilder('p')
-                                ->orderBy('p.Stock', 'DESC');
+                                ->where('p.Stock > 0')
+                                ->orderBy('p.id', 'DESC');
                             },
                         ])
                 ->add('Cantidad', NumberType::class,

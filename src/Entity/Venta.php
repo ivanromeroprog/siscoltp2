@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: VentaRepository::class)]
-#[UniqueEntity('Factura')]
+//#[UniqueEntity('Factura')]
 class Venta
 {
     #[ORM\Id]

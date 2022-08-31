@@ -28,11 +28,11 @@ tbody.detalles div.mb-3{
    }
 }
 
-input {
+input, textarea {
   border-style: dashed !important;
 }
 
-input:required, input.falserequired{
+input:required, input.falserequired, textarea:required, textarea.falserequired{
   border-style: solid !important;
 }
 /*

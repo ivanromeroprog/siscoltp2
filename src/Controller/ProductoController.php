@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Producto;
 use App\Form\ProductoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -14,31 +15,27 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[IsGranted('ROLE_USER')]
-class ProductoController extends AbstractController
-{
+class ProductoController extends AbstractController {
 
     private EntityManagerInterface $em;
     private EntityRepository $cr;
 
-    public function __construct(EntityManagerInterface $em)
-    {
+    public function __construct(EntityManagerInterface $em) {
         $this->em = $em;
         $this->cr = $this->em->getRepository(Producto::class);
     }
 
     #[Route('/producto', name: 'app_producto')]
-    public function index(): Response
-    {
+    public function index(): Response {
         $productos = $this->cr->findAll();
 
         return $this->render('producto/index.html.twig', [
-            'productos' => $productos
+                    'productos' => $productos
         ]);
     }
 
     #[Route('/producto/nuevo', name: 'app_producto_new')]
-    public function new(Request $request): Response
-    {
+    public function new(Request $request): Response {
         $producto = new Producto();
         $form = $this->createForm(ProductoType::class, $producto);
         $form->handleRequest($request);
@@ -53,14 +50,12 @@ class ProductoController extends AbstractController
         }
 
         return $this->render('producto/new.html.twig', [
-            'form' => $form->createView()
+                    'form' => $form->createView()
         ]);
     }
 
-
     #[Route('/producto/editar/{id}', name: 'app_producto_edit')]
-    public function edit(int $id, Request $request): Response
-    {
+    public function edit(int $id, Request $request): Response {
         $producto = $this->cr->find($id);
 
         if (is_null($producto))
@@ -78,14 +73,12 @@ class ProductoController extends AbstractController
         }
 
         return $this->render('producto/new.html.twig', [
-            'form' => $form->createView()
+                    'form' => $form->createView()
         ]);
     }
 
-
     #[Route('/producto/delete/{id}', name: 'app_producto_delete', methods: ['GET', 'HEAD'])]
-    public function delete(int $id): Response
-    {
+    public function delete(int $id): Response {
 
         if ($id < 1)
             throw new AccessDeniedHttpException();
@@ -93,13 +86,12 @@ class ProductoController extends AbstractController
         $producto = $this->cr->find($id);
 
         return $this->render('producto/delete.html.twig', [
-            'producto' => $producto
+                    'producto' => $producto
         ]);
     }
 
     #[Route('/producto/delete', name: 'app_producto_dodelete', methods: ['DELETE'])]
-    public function doDelete(Request $request): Response
-    {
+    public function doDelete(Request $request): Response {
 
         $submittedToken = $request->request->get('_token');
 
@@ -121,10 +113,14 @@ class ProductoController extends AbstractController
         $producto = $this->cr->find($id);
 
         $this->em->remove($producto);
-        $this->em->flush();
+        try {
+            $this->em->flush();
+            $this->addFlash('success', 'Se eliminó el producto correctamente.');
 
-        $this->addFlash('success', 'Se eliminó el producto correctamente.');
-
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->addFlash('error', 'No se puede eliminar el producto. Ya se ha vendido.');
+        }
         return $this->redirectToRoute('app_producto');
     }
+
 }

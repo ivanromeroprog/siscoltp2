@@ -54,10 +54,14 @@
                                 <a class="nav-link{% if app.request.attributes.get( '_route' ) starts with 'app_usuario' %} active{% endif %}" href="{{ path('app_usuario') }}">Usuarios</a>
                             </li>
                             <li class="nav-item disabled">
-                                <a href="#"class="nav-link disabled"></a>
+                                <a href="#" class="nav-link disabled"></a>
+                            </li>
+                                                        <li class="nav-item disabled">
+                                <a class="nav-link disabled"><i class="bi bi-person-fill "></i> {{ app.user.username }}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_logout') }}">Salir <i class="bi bi-person-fill "></i></a>
+                                
+                                <a class="nav-link" href="{{ path('app_logout') }}">Salir</a>
                             </li>
                         {% else %}
                             <li class="nav-item">

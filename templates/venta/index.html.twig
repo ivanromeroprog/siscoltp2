@@ -18,14 +18,14 @@
                 <th>Fecha</th>
                 <th>Total</th>
                 <th>Estado</th>
-                {# <th>Teléfono</th>
-                <th>Dirección</th> #}
+                    {# <th>Teléfono</th>
+                    <th>Dirección</th> #}
                 <th></th>
             </tr>
         </thead>
         <tbody>
             {% for venta in ventas %}
-                <tr>
+                <tr{% if venta.Estado == 'Anulada' %} style="background-color: #aaa"{% endif %}>
                     {# <td>{{ venta.id }}</td> #}
                     <td>{{ venta.Factura }}</td>
                     <td>{{ venta.Fecha|date("d/m/Y") }}</td>
@@ -33,8 +33,12 @@
                     <td>{{ venta.Estado }}</td>
                     {# <td>{{ venta.Telefono }}</td>
                     <td>{{ venta.Direccion }}</td> #}
-                    <td><a href="{{ path('app_venta_edit',{'id':venta.id}) }}" class="btn btn-primary btn-sm"><i class="bi bi-card-text"></i></a>
-                        <a href="{{ path('app_venta_delete',{'id':venta.id}) }}" class="btn btn-danger btn-sm"><i class="bi bi-x-circle"></i></a></td>
+                    <td>
+                        <a href="{{ path('app_venta_edit',{'id':venta.id}) }}" class="btn btn-primary btn-sm" title="Ver Remito"><i class="bi bi-card-text"></i></a>
+                           
+                        <a href="{% if venta.Estado == 'Anulada' %}#{% else %}{{ path('app_venta_delete',{'id':venta.id}) }}{% endif %}" class="btn btn-danger btn-sm {% if venta.Estado == 'Anulada' %} disabled{% endif %}" title="Anular"><i class="bi bi-x-circle"></i></a>
+                        
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

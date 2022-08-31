@@ -27,10 +27,12 @@ class VentaController extends AbstractController {
         $this->em = $em;
         $this->cr = $this->em->getRepository(Venta::class);
     }
-
+    
+    //TODO agregar data tables
+    //TODO hacer remito en eliminar y editar-ver
     #[Route('/venta', name: 'app_venta')]
     public function index(): Response {
-        $ventas = $this->cr->findAll();
+        $ventas = $this->cr->findBy([], ['id'=>'DESC']);
 
         return $this->render('venta/index.html.twig', [
                     'ventas' => $ventas
@@ -61,31 +63,44 @@ class VentaController extends AbstractController {
         if ($form->isSubmitted() && $form->isValid()) {
 
             $detalles = $venta->getDetalles();
+            $detalles_productos_id = [];
             $total = 0;
             $error = '';
             //$prodlist = [];
 
             foreach ($detalles as $k => $detalle) {
-                
-                if($detalles[$k]->getCantidad() < 1)
-                {
-                    unset($detalles[$k]);
-                }
-                else
-                {
-                $detalles[$k]->setCostoUnitario($detalle->getProducto()->getPrecio());
-                $detalle->getProducto()->setStock($detalle->getProducto()->getStock() - $detalle->getCantidad());
-                $total = $total + ($detalles[$k]->getCostoUnitario() * $detalles[$k]->getCantidad());
 
-                if ($detalle->getProducto()->getStock() < 0) {
-                    $error = "No puedes vender tantos/as " . $detalle->getProducto()->getNombre() . ". Revisa tu pedido.";
-                    break;
-                }
+                if ($detalles[$k]->getCantidad() < 1) {
+                    unset($detalles[$k]);
+                } else {
+
+                    $detalles[$k]->setCostoUnitario($detalle->getProducto()->getPrecio());
+                    $detalle->getProducto()->setStock($detalle->getProducto()->getStock() - $detalle->getCantidad());
+                    $total = $total + ($detalles[$k]->getCostoUnitario() * $detalles[$k]->getCantidad());
+
+                    //Eliminar producto repetido y acumular su cantidad con el detalle ya guardado
+                    if (array_key_exists($detalle->getProducto()->getId(), $detalles_productos_id)) {
+                        $detalles_productos_id[$detalle->getProducto()->getId()]->setCantidad(
+                                $detalles_productos_id[$detalle->getProducto()->getId()]->getCantidad() +
+                                $detalle->getCantidad()
+                        );
+                        
+                        unset($detalles[$k]);
+                    }
+                    else
+                    {
+                        $detalles_productos_id[$detalle->getProducto()->getId()] = $detalle;
+                    }
+
+                    if ($detalle->getProducto()->getStock() < 0) {
+                        $error = "No puedes vender tantos/as " . $detalle->getProducto()->getNombre() . ". Revisa tu pedido.";
+                        break;
+                    }
                 }
 
                 //$prodlist[] = $detalle->getProducto();
             }
-            if(count($detalles) < 1){
+            if (count($detalles) < 1) {
                 $error = "Debe seleccionar un producto para vender.";
             }
 
@@ -102,7 +117,7 @@ class VentaController extends AbstractController {
                 $this->em->persist($venta);
                 $this->em->flush();
 
-                $this->addFlash('success', 'Se creo la venta correctamente.');
+                $this->addFlash('success', 'Se realizó la venta correctamente.');
 
                 return $this->redirectToRoute('app_venta');
             } else {
@@ -160,13 +175,11 @@ class VentaController extends AbstractController {
     public function doDelete(Request $request): Response {
 
         $submittedToken = $request->request->get('_token');
-
         if (!$this->isCsrfTokenValid('borrarcosa', $submittedToken)) {
             throw new AccessDeniedHttpException();
         }
 
         $id = $request->get('id');
-
         if (is_numeric($id)) {
             $id = intval($id);
             if ($id < 1) {
@@ -177,11 +190,23 @@ class VentaController extends AbstractController {
         }
 
         $venta = $this->cr->find($id);
+        if ($venta->getEstado() == 'Anulado') {
+            throw new AccessDeniedHttpException();
+        }
 
-        $this->em->remove($venta);
+        $detalles = $venta->getDetalles();
+
+        foreach ($detalles as $k => $detalle) {
+            $p = $detalle->getProducto();
+            $p->setStock($p->getStock() + $detalle->getCantidad());
+            $this->em->persist($p);
+        }
+
+        $venta->setEstado('Anulada');
+
         $this->em->flush();
 
-        $this->addFlash('success', 'Se eliminó el venta correctamente.');
+        $this->addFlash('success', 'Se anuló la venta correctamente.');
 
         return $this->redirectToRoute('app_venta');
     }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Cliente;
 use App\Form\ClienteType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -112,9 +113,13 @@ class ClienteController extends AbstractController {
         $cliente = $this->cr->find($id);
 
         $this->em->remove($cliente);
-        $this->em->flush();
 
-        $this->addFlash('success', 'Se eliminó el cliente correctamente.');
+        try {
+            $this->em->flush();
+            $this->addFlash('success', 'Se eliminó el cliente correctamente.');
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->addFlash('error', 'No se puede eliminar el cliente. Ya se le ha vendido.');
+        }
 
         return $this->redirectToRoute('app_cliente');
     }

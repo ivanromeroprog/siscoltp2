@@ -11,6 +11,13 @@
 			{{ message }}
 		</div>
 	{% endfor %}
+        
+        {% for message in app.flashes('error') %}
+		<div class="alert alert-danger">
+			{{ message }}
+		</div>
+	{% endfor %}
+        
 	<a href="{{ path('app_producto_new') }}" class="btn btn-success">
 		<i class="bi bi-plus-circle-fill"></i>
 		Nuevo</a>
@@ -20,7 +27,7 @@
 				<th>Id</th>
 				<th>Nombre</th>
 				<th>Stock</th>
-                <th>Descripción</th>
+                                <th>Descripción</th>
 				<th></th>
 			</tr>
 		</thead>

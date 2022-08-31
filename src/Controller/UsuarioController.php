@@ -4,12 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Usuario;
 use App\Form\UsuarioType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -77,15 +79,13 @@ class UsuarioController extends AbstractController {
 
         if ($request->isMethod('POST')) {
             $formdata = $request->get($form->getName());
-            
 
             if ($formdata['password']['first'] === '') {
-                
+
                 unset($formdata['password']);
                 $form->submit($formdata, false);
-                
             } else {
-                
+
                 $form->submit($formdata);
                 $plaintextPassword = $form->get('password')->getData();
                 $hashedPassword = $passwordHasher->hashPassword(
@@ -93,10 +93,9 @@ class UsuarioController extends AbstractController {
                         $plaintextPassword
                 );
                 $usuario->setPassword($hashedPassword);
-                
             }
 
-            
+
 
             if ($form->isSubmitted() && $form->isValid()) {
 
@@ -148,21 +147,25 @@ class UsuarioController extends AbstractController {
         }
 
         $usuariologeado = $this->getUser();
-        
+
         $usuario = $this->ur->find($id);
-        
-        if($usuario->getId() === $usuariologeado->getId())
-        {
+
+        if ($usuario->getId() === $usuariologeado->getId()) {
             $this->addFlash('warning', 'No se puede eliminar el usuario logeado actualmente.');
 
-            return $this->redirectToRoute('app_usuario'); 
+            return $this->redirectToRoute('app_usuario');
         }
-        
+
 
         $this->em->remove($usuario);
-        $this->em->flush();
 
-        $this->addFlash('success', 'Se eliminó el usuario correctamente.');
+        try {
+            $this->em->flush();
+            $this->addFlash('success', 'Se eliminó el usuario correctamente.');
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->addFlash('error', 'No se puede eliminar el usuario, ya ha realizado una venta.');
+        }
+
 
         return $this->redirectToRoute('app_usuario');
     }
