@@ -102,7 +102,7 @@ class VentaController extends AbstractController {
                 $this->em->persist($venta);
                 $this->em->flush();
 
-                $this->addFlash('success', 'Se realizó la venta correctamente. Puede <a href="'. $this->generateUrl('app_venta_view',['id' => $venta->getId(),'print' => 'print']) .'">imprimir el remito aquí</a>.');
+                $this->addFlash('success', 'Se realizó la venta correctamente. Puede <a href="'. $this->generateUrl('app_venta_view',['id' => $venta->getId(),'print' => 'print']) .'" target="_blank">imprimir el remito aquí</a>.');
 
                 return $this->redirectToRoute('app_venta');
             } else {

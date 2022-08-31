@@ -30,15 +30,18 @@ window.addEventListener("load", function () {
             });
 
     //Data Table
-    $('#tabla').DataTable({
-        language: dtlang,
-        order: []
-    });
-    
-    $('#tablaventa').DataTable({
-        language: dtlang,
-        order: []
-    });
+    if ($('#tabla')) {
+        $('#tabla').DataTable({
+            language: dtlang,
+            order: []
+        });
+    }
+    if ($('#tablaventa')) {
+        $('#tablaventa').DataTable({
+            language: dtlang,
+            order: []
+        });
+    }
 });
 
 const newChoisesJs = (item) => {
