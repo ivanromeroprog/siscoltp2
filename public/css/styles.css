@@ -44,11 +44,11 @@ input:required, input.falserequired, textarea:required, textarea.falserequired{
 }
 
 @media (max-width: 600px) {
-    #tabla thead, #tablaventa thead{
+    thead, thead{
         font-size: 0.8em;
     }
 
-    #tabla tbody, #tablaventa tbody,#tabla tfoot, #tablaventa tfoot{
+    tbody, tbody, tfoot, tfoot{
         font-size: 0.75em;
     }
 }

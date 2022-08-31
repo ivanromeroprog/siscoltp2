@@ -21,9 +21,9 @@
 		<input type="hidden" name="id" value="{{ producto.id }}"/>
 		<input type="hidden" name="_method" value="DELETE"/>
 		<input type="hidden" name="_token" value="{{ csrf_token('borrarcosa') }}"/>
-		<div class="text-center">
-			<a href="{{ path('app_producto') }}" class="btn btn-secondary">Volver</a>
-			<input type="submit" value="Eliminar" class="btn btn-danger"/>
-		</div>
+		
+			
+			<input type="submit" value="Eliminar" class="btn btn-danger" style="float: right" /><a href="{{ path('app_producto') }}" class="btn btn-secondary">Volver</a>
+		
 	</form>
 {% endblock %}

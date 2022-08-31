@@ -8,8 +8,6 @@
         <div class="alert alert-danger">
             <p class="fw-bold">¿Está seguro de anular este Venta?</p>
             <p>El stock sera devuelto a los productos correspondientes.</p>
-            <p>ID: {{ venta.id }} - Nº de Factura: {{ venta.Factura }}</p>
-            
         </div>
 
 {{ include('venta/remito.html.twig', with_context = true) }}
@@ -17,9 +15,9 @@
         <input type="hidden" name="id" value="{{ venta.id }}" />
         <input type="hidden" name="_method" value="DELETE" />
 <input type="hidden" name="_token" value="{{ csrf_token('borrarcosa') }}"/>
-        <div class="text-center"> 
-            <a href="{{ path('app_venta') }}" class="btn btn-secondary">Volver</a>
-            <input type="submit" value="Anular" class="btn btn-danger" />
-        </div>
+ 
+            
+<input type="submit" value="Anular" class="btn btn-danger" style="float: right" /><a href="{{ path('app_venta') }}" class="btn btn-secondary">Volver</a>
+
     </form>
 {% endblock %}
