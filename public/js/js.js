@@ -8,26 +8,28 @@ window.addEventListener("load", function () {
 
     //Boton agregar a clase add_item_link
     document
-            .querySelectorAll('.add_item_link')
-            .forEach(btn => {
-                btn.addEventListener("click", addFormToCollection)
-            });
+        .querySelectorAll('.add_item_link')
+        .forEach(btn => {
+            btn.addEventListener("click", addFormToCollection)
+        });
 
     //Boton eliminar detalles
     //Actualizar Stock al iniciar
     document
-            .querySelectorAll('tbody.detalles tr')
-            .forEach((item) => {
-                addFormDeleteLink(item);
-                updateStock(item);
-            });
+        .querySelectorAll('tbody.detalles tr')
+        .forEach((item) => {
+            addFormDeleteLink(item);
+            updateStock(item);
+        });
 
     //Actualizar stock cuando cambia valor
+    /*
     document
-            .querySelectorAll('tbody.detalles tr')
-            .forEach((item) => {
+        .querySelectorAll('tbody.detalles tr')
+        .forEach((item) => {
 
-            });
+        });
+    */
 
     //Data Table
     if ($('#tabla')) {
@@ -61,27 +63,34 @@ const addFormToCollection = (e) => {
     item.classList.add('animate__flash')
 
     item.innerHTML = collectionHolder
-            .dataset
-            .prototype
-            .replace(
-                    /__name__/g,
-                    collectionHolder.dataset.index
-                    );
+        .dataset
+        .prototype
+        .replace(
+            /__name__/g,
+            collectionHolder.dataset.index
+        );
     collectionHolder.insertBefore(item, collectionHolder.firstChild);
     ;
+
+
 
     //Agregar link para borrar
     addFormDeleteLink(item);
 
+
+
     //Agregar choises.js
     item.querySelectorAll('.js-choice')
-            .forEach((item) => {
-                item.focus();
-                tmp = newChoisesJs(item);
-            });
+        .forEach((item) => {
+            item.focus();
+            tmp = newChoisesJs(item);
+        });
 
-    //Stock
+    //Actualizar Stock
     updateStock(item);
+
+    //Total
+    refreshTotal();
 
     collectionHolder.dataset.index++;
 };
@@ -101,10 +110,8 @@ const addFormDeleteLink = (item) => {
 
     removeFormButton.firstChild.addEventListener('click', (e) => {
         e.preventDefault();
-        // remove the tr for the form
-        //if (confirm('¿Está seguro de eliminar?')) {
         item.remove();
-        //}
+        refreshTotal();
     });
 }
 
@@ -116,15 +123,15 @@ const updateStock = (item) => {
 
     //Buscar el control de stock
     item.querySelectorAll('.producto_stock')
-            .forEach((stock) => {
-                stockEl = stock;
-            });
+        .forEach((stock) => {
+            stockEl = stock;
+        });
 
     //Buscar el control del producto
     item.querySelectorAll('.js-choice')
-            .forEach((prod) => {
-                prodEl = prod;
-            });
+        .forEach((prod) => {
+            prodEl = prod;
+        });
 
     //Actualizar el control de Stock con el valor del producto seleccionado
     ps.forEach((v) => {
@@ -135,11 +142,11 @@ const updateStock = (item) => {
 
     //Buscar el control de Cantidad y agregarle el tooltip de Stock
     item.querySelectorAll('.producto_cantidad')
-            .forEach((cant) => {
-                cantEl = cant;
-                cantEl.setAttribute('title', 'Stock Actual: ' + stockEl.value);
-                new bootstrap.Tooltip(cantEl);
-            });
+        .forEach((cant) => {
+            cantEl = cant;
+            cantEl.setAttribute('title', 'Stock Actual: ' + stockEl.value);
+            new bootstrap.Tooltip(cantEl);
+        });
 
     //Configurar el valor máximo y el actual para no superar el Stock
     cantEl.setAttribute('max', stockEl.value);
@@ -151,9 +158,60 @@ const updateStock = (item) => {
         cantEl.value = stockEl.value;
     }
 
-    //Agregar esta función al vento de cambio de Valor del Producto
+    //Agregar esta función al evento de cambio de Valor del Producto
     prodEl.onchange = function () {
         updateStock(item);
+        refreshTotal();
     };
 
+    //Agregar refreshTotal al evento de cambio de Valor de Cantidad
+    cantEl.onchange = function () {
+        refreshTotal();
+    };
 };
+
+const refreshTotal = () => {
+
+    var total = 0;
+
+    document
+        .querySelectorAll('tbody.detalles tr')
+        .forEach((item) => {
+            var prodEl;
+            var cantEl;
+
+            //Buscar el control del producto
+            item.querySelectorAll('.js-choice')
+                .forEach((prod) => {
+                    prodEl = prod;
+                });
+
+            //Precio
+            precio = 0;
+            pp.forEach((v) => {
+                if (v.id == prodEl.value) {
+                    precio = parseFloat(v.Precio);
+                }
+            });
+
+            //Buscar el control de Productos
+            item.querySelectorAll('.producto_cantidad')
+                .forEach((cant) => {
+                    cantEl = cant;
+                });
+
+            total += (parseFloat(cantEl.value) * precio);
+        });
+
+        let nf = Intl.NumberFormat('es-AR', {
+            style: 'currency',
+            currency: 'ARS',
+    
+            // These options are needed to round to whole numbers if that's what you want.
+            //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+            //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+        });
+    
+        document.getElementById('totalhtml').innerHTML = nf.format(parseFloat(total));
+
+}
