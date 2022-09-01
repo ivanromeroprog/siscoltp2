@@ -56,6 +56,9 @@ class ClienteController extends AbstractController {
 
     #[Route('/cliente/editar/{id}', name: 'app_cliente_edit')]
     public function edit(int $id, Request $request): Response {
+        if ($id < 1)
+            throw new AccessDeniedHttpException();
+
         $cliente = $this->cr->find($id);
 
         if (is_null($cliente))
@@ -77,17 +80,43 @@ class ClienteController extends AbstractController {
         ]);
     }
 
-    #[Route('/cliente/delete/{id}', name: 'app_cliente_delete', methods: ['GET', 'HEAD'])]
-    public function delete(int $id): Response {
-
+    #[Route('/cliente/ver/{id}', name: 'app_cliente_view')]
+    public function view(int $id): Response {
         if ($id < 1)
             throw new AccessDeniedHttpException();
 
         $cliente = $this->cr->find($id);
 
-        return $this->render('cliente/delete.html.twig', [
-                    'cliente' => $cliente
+        if (is_null($cliente))
+            throw new AccessDeniedHttpException();
+
+        $form = $this->createForm(ClienteType::class, $cliente, ['view' => true]);
+
+        return $this->render('cliente/new.html.twig', [
+                    'form' => $form->createView()
         ]);
+    }
+
+    #[Route('/cliente/delete/{id}', name: 'app_cliente_delete', methods: ['GET', 'HEAD'])]
+    public function delete(int $id): Response {
+        if ($id < 1)
+            throw new AccessDeniedHttpException();
+
+        $cliente = $this->cr->find($id);
+
+        if (is_null($cliente))
+            throw new AccessDeniedHttpException();
+
+        $form = $this->createForm(ClienteType::class, $cliente, ['view' => true]);
+
+        return $this->render('cliente/delete.html.twig', [
+                    'cliente' => $cliente,
+                    'form' => $form->createView()
+        ]);
+        /*
+          return $this->render('cliente/delete.html.twig', [
+          'cliente' => $cliente
+          ]); */
     }
 
     #[Route('/cliente/delete', name: 'app_cliente_dodelete', methods: ['DELETE'])]

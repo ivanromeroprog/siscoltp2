@@ -36,8 +36,11 @@
                     <td>{{ cliente.Apellido }}</td>
                     {# <td>{{ cliente.Telefono }}</td>
                     <td>{{ cliente.Direccion }}</td> #}
-                    <td><a href="{{ path('app_cliente_edit',{'id':cliente.id}) }}" class="btn btn-primary btn-sm" title="Editar"><i class="bi bi-pencil-fill"></i></a>
-                        <a href="{{ path('app_cliente_delete',{'id':cliente.id}) }}" class="btn btn-danger btn-sm" title="Eliminar"><i class="bi bi-trash-fill"></i></a></td>
+                    <td>
+                        <a href="{{ path('app_cliente_view',{'id':cliente.id}) }}" class="btn btn-primary btn-sm" title="Editar"><i class="bi bi-eye"></i></a>
+                        <a href="{{ path('app_cliente_edit',{'id':cliente.id}) }}" class="btn btn-primary btn-sm" title="Editar"><i class="bi bi-pencil-fill"></i></a>
+                        <a href="{{ path('app_cliente_delete',{'id':cliente.id}) }}" class="btn btn-danger btn-sm" title="Eliminar"><i class="bi bi-trash-fill"></i></a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

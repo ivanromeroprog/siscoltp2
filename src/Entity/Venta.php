@@ -42,6 +42,9 @@ class Venta
     #[ORM\JoinColumn(nullable: false)]
     private ?Usuario $usuario = null;
 
+    #[ORM\Column(length: 10)]
+    private ?string $TipoFactura = null;
+
     public function __construct()
     {
         $this->detalles = new ArrayCollection();
@@ -150,6 +153,18 @@ class Venta
     public function setUsuario(?Usuario $usuario): self
     {
         $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    public function getTipoFactura(): ?string
+    {
+        return $this->TipoFactura;
+    }
+
+    public function setTipoFactura(string $TipoFactura): self
+    {
+        $this->TipoFactura = $TipoFactura;
 
         return $this;
     }

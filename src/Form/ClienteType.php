@@ -16,12 +16,12 @@ class ClienteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('Dni', NumberType::class, ['html5' => true, 'scale' => 0, 'attr' => ['min' => '0']])
-            ->add('Nombre')
-            ->add('Apellido')
-            ->add('Telefono', TelType::class,['required' => false,'label'=>'Teléfono'])
-            ->add('Direccion', TextType::class,['required' => false,'label'=>'Dirección'])
-            ->add('Submit', SubmitType::class, ['label'=>'Guardar', 'attr'=>[ 'style'=>"float:right;"]])
+            ->add('Dni', NumberType::class, ['html5' => true, 'scale' => 0, 'attr' => ['min' => '0'], 'disabled' => $options['view']])
+            ->add('Nombre', TextType::class, ['disabled' => $options['view']])
+            ->add('Apellido', TextType::class, ['disabled' => $options['view']])
+            ->add('Telefono', TelType::class,['required' => false,'label'=>'Teléfono','disabled' => $options['view']])
+            ->add('Direccion', TextType::class,['required' => false,'label'=>'Dirección','disabled' => $options['view']])
+            ->add('Submit', SubmitType::class, ['label'=>'Guardar', 'attr'=>[ 'style'=>"float:right;"],'disabled' => $options['view']])
         ;
     }
 
@@ -29,6 +29,7 @@ class ClienteType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Cliente::class,
+            'view' => false
         ]);
     }
 }

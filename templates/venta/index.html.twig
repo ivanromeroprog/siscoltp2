@@ -14,7 +14,7 @@
         <thead>
             <tr>
                 {# <th>Id</th> #}
-                <th>Factura</th>
+                <th>Remito Nº</th>
                 <th>Fecha</th>
                 <th>Total</th>
                 <th>Estado</th>
@@ -27,7 +27,7 @@
             {% for venta in ventas %}
                 <tr{% if venta.Estado == 'Anulada' %} style="background-color: #faa"{% endif %}>
                     {# <td>{{ venta.id }}</td> #}
-                    <td>{{ venta.Factura|u.truncate(13, '...') }}</td>
+                    <td>{{ venta.id|u.truncate(13, '...') }}</td>
                     <td>{{ venta.Fecha|date("d/m/Y") }}</td>
                     <td>$ {{ venta.Total }}</td>
                     <td>

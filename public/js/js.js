@@ -57,6 +57,8 @@ const addFormToCollection = (e) => {
     const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
 
     const item = document.createElement('tr');
+    item.classList.add('animate__animated')
+    item.classList.add('animate__flash')
 
     item.innerHTML = collectionHolder
             .dataset
@@ -74,8 +76,8 @@ const addFormToCollection = (e) => {
     //Agregar choises.js
     item.querySelectorAll('.js-choice')
             .forEach((item) => {
-                newChoisesJs(item);
-
+                item.focus();
+                tmp = newChoisesJs(item);
             });
 
     //Stock

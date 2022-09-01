@@ -8,9 +8,9 @@
             <td>{{ venta.Fecha|date("d/m/Y") }}</td>
         </tr>
         <tr>
-            <th scope="row">Nº Factura</th>
-            <td>{{ venta.Factura }}</td>
-            <th scope="row">Cod. Venta</th>
+            <th scope="row">Factura</th>
+            <td>[{{ venta.TipoFactura }}] {{ venta.Factura }}</td>
+            <th scope="row">Remito Nº</th>
             <td>{{ venta.id }}</td>
         </tr>
 </table>
