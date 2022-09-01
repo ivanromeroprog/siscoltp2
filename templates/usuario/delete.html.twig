@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
 
 {% block title %}SisVentas - Usuarios{% endblock %}
 {% block bodytitle %}Eliminar Usuario{% endblock %}
@@ -7,17 +8,15 @@
     <form action="{{ path('app_usuario_dodelete') }}" method="POST">
         <div class="alert alert-danger">
             <p class="fw-bold">¿Está seguro de eliminar este Usuario?</p>
-
-            <p>ID: {{ usuario.id }} - Nombre de Usuario: {{ usuario.username }} - {{ usuario.Nombre }} {{ usuario.Apellido }}</p>
         </div>
-
+        {{ form(form) }}
 
         <input type="hidden" name="id" value="{{ usuario.id }}" />
         <input type="hidden" name="_method" value="DELETE" />
-<input type="hidden" name="_token" value="{{ csrf_token('borrarcosa') }}"/>
+        <input type="hidden" name="_token" value="{{ csrf_token('borrarcosa') }}"/>
         <input type="submit" value="Eliminar" class="btn btn-danger" style="float: right" />
-            <a href="{{ path('app_usuario') }}" class="btn btn-secondary">Volver</a>
-            
-        
+        <a href="{{ path('app_usuario') }}" class="btn btn-secondary">Volver</a>
+
+
     </form>
 {% endblock %}

@@ -21,8 +21,10 @@ class ClienteType extends AbstractType
             ->add('Apellido', TextType::class, ['disabled' => $options['view']])
             ->add('Telefono', TelType::class,['required' => false,'label'=>'Teléfono','disabled' => $options['view']])
             ->add('Direccion', TextType::class,['required' => false,'label'=>'Dirección','disabled' => $options['view']])
-            ->add('Submit', SubmitType::class, ['label'=>'Guardar', 'attr'=>[ 'style'=>"float:right;"],'disabled' => $options['view']])
         ;
+        
+        if(!$options['view'])
+            $builder->add('Submit', SubmitType::class, ['label'=>'Guardar', 'attr'=>[ 'style'=>"float:right;"],'disabled' => $options['view']]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

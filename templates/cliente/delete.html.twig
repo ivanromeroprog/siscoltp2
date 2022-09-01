@@ -8,17 +8,15 @@
     <form action="{{ path('app_cliente_dodelete') }}" method="POST">
         <div class="alert alert-danger">
             <p class="fw-bold">¿Está seguro de eliminar este Cliente?</p>
-
-            
         </div>
 
-{{ form(form) }}
+        {{ form(form) }}
         <input type="hidden" name="id" value="{{ cliente.id }}" />
         <input type="hidden" name="_method" value="DELETE" />
-<input type="hidden" name="_token" value="{{ csrf_token('borrarcosa') }}"/>
-<input type="submit" value="Eliminar" class="btn btn-danger"  style="float: right" />
-            <a href="{{ path('app_cliente') }}" class="btn btn-secondary">Volver</a>
-            
+        <input type="hidden" name="_token" value="{{ csrf_token('borrarcosa') }}"/>
+        <input type="submit" value="Eliminar" class="btn btn-danger"  style="float: right" />
+        <a href="{{ path('app_cliente') }}" class="btn btn-secondary">Volver</a>
+
 
     </form>
 {% endblock %}

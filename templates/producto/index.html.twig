@@ -6,49 +6,51 @@
 {% endblock %}
 
 {% block body %}
-	{% for message in app.flashes('success') %}
-		<div class="alert alert-success">
-			{{ message }}
-		</div>
-	{% endfor %}
-        
-        {% for message in app.flashes('error') %}
-		<div class="alert alert-danger">
-			{{ message }}
-		</div>
-	{% endfor %}
-        
-	<a href="{{ path('app_producto_new') }}" class="btn btn-success">
-		<i class="bi bi-plus-circle-fill"></i>
-		Nuevo</a>
-	<table class="table table-striped table-sm" id="tabla">
-		<thead>
-			<tr>
-				<th>Id</th>
-				<th>Nombre</th>
-				<th>Stock</th>
-                                <th>Descripción</th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for producto in productos %}
-				<tr>
-					<td>{{ producto.id }}</td>
-					<td>{{ producto.Nombre }}</td>
-					<td>{{ producto.Stock }}</td>
-					<td>{{ producto.Descripcion|u.truncate(15, '...') }}</td>
-					<td>
-						<a href="{{ path('app_producto_edit',{'id':producto.id}) }}" class="btn btn-primary btn-sm">
-							<i class="bi bi-pencil-fill"></i>
-						</a>
-						<a href="{{ path('app_producto_delete',{'id':producto.id}) }}" class="btn btn-danger btn-sm">
-							<i class="bi bi-trash-fill"></i>
-						</a>
-					</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <a href="{{ path('app_producto_new') }}" class="btn btn-success">
+        <i class="bi bi-plus-circle-fill"></i>
+        Nuevo</a>
+    <table class="table table-striped table-sm" id="tabla">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Stock</th>
+                <th>Descripción</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+                <tr>
+                    <td>{{ producto.id }}</td>
+                    <td>{{ producto.Nombre }}</td>
+                    <td>{{ producto.Stock }}</td>
+                    <td>{{ producto.Descripcion|u.truncate(15, '...') }}</td>
+                    <td>
+                        <a href="{{ path('app_producto_view',{'id':producto.id}) }}" class="btn btn-primary btn-sm" title="Editar"><i class="bi bi-eye"></i></a>
+
+                        <a href="{{ path('app_producto_edit',{'id':producto.id}) }}" class="btn btn-primary btn-sm">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                        <a href="{{ path('app_producto_delete',{'id':producto.id}) }}" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}
