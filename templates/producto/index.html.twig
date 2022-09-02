@@ -27,7 +27,7 @@
                 <th>Id</th>
                 <th>Nombre</th>
                 <th>Stock</th>
-                <th>Descripción</th>
+                <th class="d-none d-sm-table-cell">Descripción</th>
                 <th></th>
             </tr>
         </thead>
@@ -37,14 +37,14 @@
                     <td>{{ producto.id }}</td>
                     <td>{{ producto.Nombre }}</td>
                     <td>{{ producto.Stock }}</td>
-                    <td>{{ producto.Descripcion|u.truncate(15, '...') }}</td>
+                    <td class="d-none d-sm-table-cell">{{ producto.Descripcion|u.truncate(15, '...') }}</td>
                     <td>
-                        <a href="{{ path('app_producto_view',{'id':producto.id}) }}" class="btn btn-primary btn-sm" title="Editar"><i class="bi bi-eye"></i></a>
+                        <a href="{{ path('app_producto_view',{'id':producto.id}) }}" class="btn btn-primary btn-sm" title="Ver"><i class="bi bi-eye"></i></a>
 
-                        <a href="{{ path('app_producto_edit',{'id':producto.id}) }}" class="btn btn-primary btn-sm">
+                        <a href="{{ path('app_producto_edit',{'id':producto.id}) }}" class="btn btn-primary btn-sm" title="Editar">
                             <i class="bi bi-pencil-fill"></i>
                         </a>
-                        <a href="{{ path('app_producto_delete',{'id':producto.id}) }}" class="btn btn-danger btn-sm">
+                        <a href="{{ path('app_producto_delete',{'id':producto.id}) }}" class="btn btn-danger btn-sm" title="Eliminar">
                             <i class="bi bi-trash-fill"></i>
                         </a>
                     </td>
