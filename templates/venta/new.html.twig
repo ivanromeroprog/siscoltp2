@@ -9,6 +9,7 @@
 {% block body %}
     <script>
         const ps = {{ productos_stock|raw }};
+        const pp = {{ productos_precio|raw }};
     </script>
 
     {% for message in app.flashes('error') %}
@@ -56,6 +57,14 @@
                 </tr>
             {% endfor %}
         </tbody>
+    <tfoot>
+    <tr>
+    
+        <th scope="row">Total:{# <input type="" id="totalprod" value="0" /> #}</th>
+        <th scope="row" id="totalhtml">$ 00,00</th>
+        <th scope="row"></th>
+    </tr>
+    </tfoot>
     </table>
     {{ form_rest(form) }}
     {{ form_end(form) }}

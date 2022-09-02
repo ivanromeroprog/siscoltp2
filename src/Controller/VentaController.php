@@ -18,34 +18,37 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[IsGranted('ROLE_USER')]
-class VentaController extends AbstractController {
+class VentaController extends AbstractController
+{
 
     private EntityManagerInterface $em;
     private EntityRepository $cr;
 
-    public function __construct(EntityManagerInterface $em) {
+    public function __construct(EntityManagerInterface $em)
+    {
         $this->em = $em;
         $this->cr = $this->em->getRepository(Venta::class);
     }
-    
-    //TODO agregar data tables
-    //TODO hacer remito en eliminar y editar-ver
+
     #[Route('/venta', name: 'app_venta')]
-    public function index(): Response {
-        $ventas = $this->cr->findBy([], ['id'=>'DESC']);
+    public function index(): Response
+    {
+        $ventas = $this->cr->findBy([], ['id' => 'DESC']);
 
         return $this->render('venta/index.html.twig', [
-                    'ventas' => $ventas
+            'ventas' => $ventas
         ]);
     }
 
     #[Route('/venta/nuevo', name: 'app_venta_new')]
-    public function new(Request $request): Response {
+    public function new(Request $request): Response
+    {
         $venta = new Venta();
         $venta->setFecha(new DateTime());
 
         $pr = $this->em->getRepository(Producto::class);
         $productos_stock = $pr->findAllStock();
+        $productos_precio = $pr->findAllPrecio();
 
 
         $form = $this->createForm(VentaType::class, $venta);
@@ -72,14 +75,12 @@ class VentaController extends AbstractController {
                     //Eliminar producto repetido y acumular su cantidad con el detalle ya guardado
                     if (array_key_exists($detalle->getProducto()->getId(), $detalles_productos_id)) {
                         $detalles_productos_id[$detalle->getProducto()->getId()]->setCantidad(
-                                $detalles_productos_id[$detalle->getProducto()->getId()]->getCantidad() +
+                            $detalles_productos_id[$detalle->getProducto()->getId()]->getCantidad() +
                                 $detalle->getCantidad()
                         );
-                        
+
                         unset($detalles[$k]);
-                    }
-                    else
-                    {
+                    } else {
                         $detalles_productos_id[$detalle->getProducto()->getId()] = $detalle;
                     }
 
@@ -102,7 +103,7 @@ class VentaController extends AbstractController {
                 $this->em->persist($venta);
                 $this->em->flush();
 
-                $this->addFlash('success', 'Se realizó la venta correctamente. Puede <a href="'. $this->generateUrl('app_venta_view',['id' => $venta->getId(),'print' => 'print']) .'" target="_blank">imprimir el remito aquí</a>.');
+                $this->addFlash('success', 'Se realizó la venta correctamente. Puede <a href="' . $this->generateUrl('app_venta_view', ['id' => $venta->getId(), 'print' => 'print']) . '" target="_blank">imprimir el remito aquí</a>.');
 
                 return $this->redirectToRoute('app_venta');
             } else {
@@ -111,24 +112,27 @@ class VentaController extends AbstractController {
         }
 
         return $this->render('venta/new.html.twig', [
-                    'form' => $form->createView(),
-                    'productos_stock' => json_encode($productos_stock)
+            'form' => $form->createView(),
+            'productos_stock' => json_encode($productos_stock),
+            'productos_precio' => json_encode($productos_precio)
         ]);
     }
 
     #[Route('/venta/remito/{id}/{print}', name: 'app_venta_view')]
-    public function edit(int $id, string $print = 'no'): Response {
+    public function edit(int $id, string $print = 'no'): Response
+    {
         $venta = $this->cr->find($id);
 
         return $this->render('venta/view.html.twig', [
-                    'venta' => $venta,
-                    'print' => $print
-                
+            'venta' => $venta,
+            'print' => $print
+
         ]);
     }
 
     #[Route('/venta/delete/{id}', name: 'app_venta_delete', methods: ['GET', 'HEAD'])]
-    public function delete(int $id): Response {
+    public function delete(int $id): Response
+    {
 
         if ($id < 1)
             throw new AccessDeniedHttpException();
@@ -136,12 +140,13 @@ class VentaController extends AbstractController {
         $venta = $this->cr->find($id);
 
         return $this->render('venta/delete.html.twig', [
-                    'venta' => $venta
+            'venta' => $venta
         ]);
     }
 
     #[Route('/venta/delete', name: 'app_venta_dodelete', methods: ['DELETE'])]
-    public function doDelete(Request $request): Response {
+    public function doDelete(Request $request): Response
+    {
 
         $submittedToken = $request->request->get('_token');
         if (!$this->isCsrfTokenValid('borrarcosa', $submittedToken)) {
@@ -179,5 +184,4 @@ class VentaController extends AbstractController {
 
         return $this->redirectToRoute('app_venta');
     }
-
 }

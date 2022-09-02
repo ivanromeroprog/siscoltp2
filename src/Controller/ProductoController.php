@@ -76,17 +76,40 @@ class ProductoController extends AbstractController {
                     'form' => $form->createView()
         ]);
     }
-
-    #[Route('/producto/delete/{id}', name: 'app_producto_delete', methods: ['GET', 'HEAD'])]
-    public function delete(int $id): Response {
-
+    
+    
+    #[Route('/producto/ver/{id}', name: 'app_producto_view')]
+    public function view(int $id): Response {
         if ($id < 1)
             throw new AccessDeniedHttpException();
 
         $producto = $this->cr->find($id);
 
+        if (is_null($producto))
+            throw new AccessDeniedHttpException();
+
+        $form = $this->createForm(ProductoType::class, $producto, ['view' => true]);
+
+        return $this->render('producto/new.html.twig', [
+                    'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/producto/delete/{id}', name: 'app_producto_delete', methods: ['GET', 'HEAD'])]
+    public function delete(int $id): Response {
+        if ($id < 1)
+            throw new AccessDeniedHttpException();
+
+        $producto = $this->cr->find($id);
+
+        if (is_null($producto))
+            throw new AccessDeniedHttpException();
+
+        $form = $this->createForm(ProductoType::class, $producto, ['view' => true]);
+
         return $this->render('producto/delete.html.twig', [
-                    'producto' => $producto
+                    'producto' => $producto,
+                    'form' => $form->createView()
         ]);
     }
 

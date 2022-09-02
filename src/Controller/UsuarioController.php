@@ -19,17 +19,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class UsuarioController extends AbstractController {
 
     private EntityManagerInterface $em;
-    private EntityRepository $ur;
+    private EntityRepository $cr;
 
     public function __construct(EntityManagerInterface $em) {
         $this->em = $em;
-        $this->ur = $this->em->getRepository(Usuario::class);
+        $this->cr = $this->em->getRepository(Usuario::class);
     }
 
     #[Route('/usuario', name: 'app_usuario')]
     public function index(): Response {
 
-        $usuarios = $this->ur->findAll();
+        $usuarios = $this->cr->findAll();
 
         return $this->render('usuario/index.html.twig', [
                     'usuarios' => $usuarios,
@@ -67,7 +67,7 @@ class UsuarioController extends AbstractController {
 
     #[Route('/usuario/editar/{id}', name: 'app_usuario_edit')]
     public function edit(int $id, Request $request, UserPasswordHasherInterface $passwordHasher): Response {
-        $usuario = $this->ur->find($id);
+        $usuario = $this->cr->find($id);
 
         if (is_null($usuario))
             throw new AccessDeniedHttpException();
@@ -113,16 +113,40 @@ class UsuarioController extends AbstractController {
         ]);
     }
 
+    
+    #[Route('/usuario/ver/{id}', name: 'app_usuario_view')]
+    public function view(int $id): Response {
+        if ($id < 1)
+            throw new AccessDeniedHttpException();
+
+        $usuario = $this->cr->find($id);
+
+        if (is_null($usuario))
+            throw new AccessDeniedHttpException();
+
+        $form = $this->createForm(UsuarioType::class, $usuario, ['view' => true]);
+
+        return $this->render('usuario/new.html.twig', [
+                    'form' => $form->createView()
+        ]);
+    }
+    
     #[Route('/usuario/delete/{id}', name: 'app_usuario_delete', methods: ['GET', 'HEAD'])]
     public function delete(int $id): Response {
 
         if ($id < 1)
             throw new AccessDeniedHttpException();
 
-        $usuario = $this->ur->find($id);
+        $usuario = $this->cr->find($id);
+
+        if (is_null($usuario))
+            throw new AccessDeniedHttpException();
+
+        $form = $this->createForm(UsuarioType::class, $usuario, ['view' => true]);
 
         return $this->render('usuario/delete.html.twig', [
-                    'usuario' => $usuario
+                    'usuario' => $usuario,
+                    'form' => $form->createView()
         ]);
     }
 
@@ -148,7 +172,7 @@ class UsuarioController extends AbstractController {
 
         $usuariologeado = $this->getUser();
 
-        $usuario = $this->ur->find($id);
+        $usuario = $this->cr->find($id);
 
         if ($usuario->getId() === $usuariologeado->getId()) {
             $this->addFlash('warning', 'No se puede eliminar el usuario logeado actualmente.');

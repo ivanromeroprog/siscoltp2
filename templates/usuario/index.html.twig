@@ -42,6 +42,8 @@
                     {# <td>{{ cliente.Telefono }}</td>
                     <td>{{ cliente.Direccion }}</td> #}
                     <td>
+                                                <a href="{{ path('app_usuario_view',{'id':usuario.id}) }}" class="btn btn-primary btn-sm" title="Editar"><i class="bi bi-eye"></i></a>
+
                         <a href="{{ path('app_usuario_edit',{'id':usuario.id}) }}" class="btn btn-primary btn-sm" title="Editar"><i class="bi bi-pencil-fill"></i></a>
                         <a href="{{ path('app_usuario_delete',{'id':usuario.id}) }}" class="btn btn-danger btn-sm" title="Eliminar"><i class="bi bi-trash-fill"></i></a>
                     </td>
