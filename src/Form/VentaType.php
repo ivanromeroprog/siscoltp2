@@ -37,7 +37,9 @@ class VentaType extends AbstractType
             ->add(
                 'Fecha',
                 DateTimeType::class,
-                ['html5' => true, 'widget' => 'single_text', 'attr' => ['placeholder' => 'aaaa-mm-ddThh:mm:ss']]
+                ['html5' => true, 'widget' => 'single_text',
+                'attr' => ['placeholder' => 'aaaa-mm-ddThh:mm:ss',
+                'onchange'=>'fechacel("venta_Fecha");']]
             )
             //->add('Total')
             //->add('Estado')

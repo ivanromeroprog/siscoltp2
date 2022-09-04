@@ -1,5 +1,19 @@
 {% extends 'base.html.twig' %}
-{% form_theme form 'bootstrap_5_layout.html.twig' %}
+{% form_theme form with [
+'bootstrap_5_layout.html.twig',
+_self
+] %}
+
+{% block _venta_Fecha_row %}
+    <div class="mb-3">
+        {{ form_label(form) }}
+
+        <input type="datetime-local" id="{{ form.vars.id }}" {% for k,v in form.vars.attr %}{{ k }}="{{ v }}"{% endfor %}class="form-control{{ form.vars.required ? ' falserequired'
+        }}" value="{{ form.vars.value }}">
+        <input type="hidden" value="{{ form.vars.value }}" id="{{ form.vars.id }}_h" name="{{ form.vars.full_name }}">
+        {{ form_errors(form) }}
+    </div>
+{% endblock %}
 
 {% block title %}SisVentas - Ventas
 {% endblock %}
